@@ -17,7 +17,8 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textAlignment="center"
-        android:text="List Example" />
+        android:text="List Example"
+        android:onClick="onExampleListEventClicked"/>
 
     <Button
         android:id="@+id/somethingButton"
@@ -25,7 +26,8 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textAlignment="center"
-        android:text="thisthing" />
+        android:text="Something"
+        android:onClick="onSomethingActivityClicked"/>
 
     <Button
         android:id="@+id/whatButton"
@@ -33,6 +35,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textAlignment="center"
-        android:text="What?" />
+        android:text="What?"
+        android:onClick="onRotationActivityClicked"/>
 
 </LinearLayout>
