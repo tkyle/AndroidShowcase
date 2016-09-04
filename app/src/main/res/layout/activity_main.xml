@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textAlignment="center"
-        android:text="What?"
+        android:text="Rotation Count"
         android:onClick="onRotationActivityClicked"/>
 
 </LinearLayout>

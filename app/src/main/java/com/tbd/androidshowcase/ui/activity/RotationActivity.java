@@ -17,10 +17,7 @@ public class RotationActivity extends AppCompatActivity implements IRotationView
 {
     RotationPresenter presenter;
     OrientationEventListener orientationListener;
-    String debugTag = "DEBUG";
     TextView rotationCountTextView;
-
-    public int RotationCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -31,29 +28,28 @@ public class RotationActivity extends AppCompatActivity implements IRotationView
         rotationCountTextView = (TextView)findViewById(R.id.rotationCount);
 
         presenter = new RotationPresenter(RotationActivity.this);
-        SetupRotationEventListener();
+
+        setupRotationEventListener();
     }
 
-    private void SetupRotationEventListener()
+    private void setupRotationEventListener()
     {
         orientationListener = new OrientationEventListener(this, SensorManager.SENSOR_DELAY_NORMAL)
         {
             @Override
             public void onOrientationChanged(int orientation)
             {
-                Log.v(debugTag, "Orientation changed to " + orientation);
+                //Log.v(debugTag, "Orientation changed to " + orientation);
                 presenter.EvaluateOrientationChange(orientation);
             }
         };
 
         if (orientationListener.canDetectOrientation() == true)
         {
-            Log.v(debugTag, "Can detect orientation");
             orientationListener.enable();
         }
         else
         {
-            Log.v(debugTag, "Cannot detect orientation");
             orientationListener.disable();
         }
     }
@@ -61,6 +57,7 @@ public class RotationActivity extends AppCompatActivity implements IRotationView
     @Override
     public void UpdateRotationCountTextView(int rotationCount)
     {
+        // If the phone has been rotated 360 degrees then update the rotation counter text view
         if(rotationCountTextView != null)
             rotationCountTextView.setText(Integer.toString(rotationCount));
     }

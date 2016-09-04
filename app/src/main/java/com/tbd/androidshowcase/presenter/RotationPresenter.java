@@ -30,6 +30,8 @@ public class RotationPresenter
 
     public void EvaluateOrientationChange(int orientation)
     {
+        // If the phone was not turned to the right then subtract the degree from the count
+        // Otherwise, if the phone was turned to the right add the degrees to the total count
         if(orientation < previousOrientation)
             rotationCount -= orientation;
         else
@@ -37,14 +39,16 @@ public class RotationPresenter
 
         if(rotationCount >= rotationGoal)
         {
+            // Rotation goal has been met, increase the totalRotations by 1.
             rotationCount = 0;
             totalRotations += 1;
 
+            // Update the UI
             view.UpdateRotationCountTextView(totalRotations);
         }
 
         previousOrientation = orientation;
 
-        Log.v(debugTag, "Orientation Count: " + rotationCount);
+        //Log.v(debugTag, "Orientation Count: " + rotationCount);
     }
 }
