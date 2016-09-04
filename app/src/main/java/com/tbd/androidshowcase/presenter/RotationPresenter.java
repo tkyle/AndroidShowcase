@@ -4,6 +4,7 @@ import android.content.Context;
 import android.hardware.SensorManager;
 import android.util.Log;
 import android.view.OrientationEventListener;
+import android.widget.TextView;
 
 import com.tbd.androidshowcase.view.IRotationView;
 
@@ -15,32 +16,35 @@ public class RotationPresenter
     IRotationView view;
     OrientationEventListener orientationListener;
     String debugTag = "Debug";
+    TextView rotationCountTextView;
+
+    int previousOrientation = 0;
+    int rotationGoal = 64620;
+    int rotationCount = 0;
+    int totalRotations = 0;
 
     public RotationPresenter(IRotationView view)
     {
         this.view = view;
     }
 
-    public void SetupRotationEventListener(Context context)
+    public void EvaluateOrientationChange(int orientation)
     {
-        orientationListener = new OrientationEventListener(context, SensorManager.SENSOR_DELAY_NORMAL)
-        {
-            @Override
-            public void onOrientationChanged(int orientation)
-            {
-                Log.v(debugTag, "Orientation changed to " + orientation);
-            }
-        };
-
-        if (orientationListener.canDetectOrientation() == true)
-        {
-            Log.v(debugTag, "Can detect orientation");
-            orientationListener.enable();
-        }
+        if(orientation < previousOrientation)
+            rotationCount -= orientation;
         else
+            rotationCount += orientation;
+
+        if(rotationCount >= rotationGoal)
         {
-            Log.v(debugTag, "Cannot detect orientation");
-            orientationListener.disable();
+            rotationCount = 0;
+            totalRotations += 1;
+
+            view.UpdateRotationCountTextView(totalRotations);
         }
+
+        previousOrientation = orientation;
+
+        Log.v(debugTag, "Orientation Count: " + rotationCount);
     }
 }

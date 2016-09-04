@@ -5,5 +5,5 @@ package com.tbd.androidshowcase.view;
  */
 public interface IRotationView
 {
-
+    void UpdateRotationCountTextView(int rotationCount);
 }

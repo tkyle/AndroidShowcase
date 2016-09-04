@@ -12,8 +12,9 @@
     tools:context="com.tbd.androidshowcase.ui.activity.RotationActivity">
 
     <TextView
+        android:id="@+id/rotationCount"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Rotation Activity"/>
+        android:text="0"/>
 
 </LinearLayout>
