@@ -5,11 +5,11 @@ import android.os.Bundle;
 
 import com.tbd.androidshowcase.R;
 
-public class SomethingActivity extends AppCompatActivity {
+public class DrawSomethingActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_something);
+        setContentView(R.layout.activity_drawsomething);
     }
 }

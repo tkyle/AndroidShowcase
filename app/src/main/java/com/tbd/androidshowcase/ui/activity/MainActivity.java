@@ -3,9 +3,7 @@ package com.tbd.androidshowcase.ui.activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 
 import com.tbd.androidshowcase.R;
 import com.tbd.androidshowcase.presenter.MainPresenter;
@@ -35,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements IMainView
     // region MainPresenter Methods
 
     public void onExampleListEventClicked(View button){ presenter.onExampleListActivityClicked();}
-    public void onSomethingActivityClicked(View button) { presenter.onSomethingActivityClicked(); }
+    public void onDrawSomethingActivityClicked(View button) { presenter.onDrawSomethingActivityClicked(); }
     public void onRotationActivityClicked(View button)
     {
         presenter.onRotationActivityClicked();
@@ -53,9 +51,9 @@ public class MainActivity extends AppCompatActivity implements IMainView
     }
 
     @Override
-    public void openSomethingActivity()
+    public void openDrawSomethingActivity()
     {
-        Intent intent = new Intent(this, SomethingActivity.class);
+        Intent intent = new Intent(this, DrawSomethingActivity.class);
         startActivity(intent);
     }
 

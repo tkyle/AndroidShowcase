@@ -19,9 +19,9 @@ public class MainPresenter
         view.openExampleListActivity();
     }
 
-    public void onSomethingActivityClicked()
+    public void onDrawSomethingActivityClicked()
     {
-        view.openSomethingActivity();
+        view.openDrawSomethingActivity();
     }
 
     public void onRotationActivityClicked()
