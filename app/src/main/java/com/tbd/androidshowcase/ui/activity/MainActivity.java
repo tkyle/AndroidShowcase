@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements IMainView
     // region MainPresenter Methods
 
     public void onExampleListEventClicked(View button){ presenter.onExampleListActivityClicked();}
-    public void onDrawSomethingActivityClicked(View button) { presenter.onDrawSomethingActivityClicked(); }
+    public void onMoveCircleActivityClicked(View button) { presenter.onMoveCircleActivityClicked(); }
     public void onRotationActivityClicked(View button)
     {
         presenter.onRotationActivityClicked();
@@ -51,9 +51,9 @@ public class MainActivity extends AppCompatActivity implements IMainView
     }
 
     @Override
-    public void openDrawSomethingActivity()
+    public void openMoveCircleActivity()
     {
-        Intent intent = new Intent(this, DrawSomethingActivity.class);
+        Intent intent = new Intent(this, MoveCircleActivity.class);
         startActivity(intent);
     }
 

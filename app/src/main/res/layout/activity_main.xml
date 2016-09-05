@@ -21,13 +21,13 @@
         android:onClick="onExampleListEventClicked"/>
 
     <Button
-        android:id="@+id/somethingButton"
+        android:id="@+id/moveCircleButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textAlignment="center"
-        android:text="Draw Something"
-        android:onClick="onDrawSomethingActivityClicked"/>
+        android:text="Move the Circle"
+        android:onClick="onMoveCircleActivityClicked"/>
 
     <Button
         android:id="@+id/whatButton"

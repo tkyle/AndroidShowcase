@@ -19,7 +19,7 @@
         </activity>
         <activity android:name=".ui.activity.RotationActivity">
         </activity>
-        <activity android:name=".ui.activity.DrawSomethingActivity">
+        <activity android:name=".ui.activity.MoveCircleActivity">
         </activity>
     </application>
 

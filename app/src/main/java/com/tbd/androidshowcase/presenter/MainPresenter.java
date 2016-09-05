@@ -19,9 +19,9 @@ public class MainPresenter
         view.openExampleListActivity();
     }
 
-    public void onDrawSomethingActivityClicked()
+    public void onMoveCircleActivityClicked()
     {
-        view.openDrawSomethingActivity();
+        view.openMoveCircleActivity();
     }
 
     public void onRotationActivityClicked()

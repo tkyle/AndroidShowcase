@@ -11,7 +11,7 @@ import android.view.View;
 
 import com.tbd.androidshowcase.R;
 
-public class DrawSomethingActivity extends AppCompatActivity {
+public class MoveCircleActivity extends AppCompatActivity {
 
     boolean drawCircle = false;
 
