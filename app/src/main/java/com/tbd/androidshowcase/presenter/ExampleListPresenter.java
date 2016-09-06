@@ -1,6 +1,10 @@
 package com.tbd.androidshowcase.presenter;
 
+import android.content.Intent;
+
+import com.microsoft.windowsazure.mobileservices.*;
 import com.tbd.androidshowcase.model.ExampleItem;
+import com.tbd.androidshowcase.ui.activity.ExampleListActivity;
 import com.tbd.androidshowcase.view.IExampleListView;
 
 import java.util.ArrayList;
@@ -14,6 +18,11 @@ public class ExampleListPresenter
     IExampleListView view;
 
     public ExampleListPresenter(IExampleListView view) { this.view = view; }
+
+    public void onNewItemClicked()
+    {
+        view.AddNewItem();
+    }
 
     public ExampleItem[] GetExampleItems()
     {
