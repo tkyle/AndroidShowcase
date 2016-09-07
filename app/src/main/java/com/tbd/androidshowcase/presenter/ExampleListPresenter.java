@@ -21,7 +21,7 @@ public class ExampleListPresenter
 
     public void onNewItemClicked()
     {
-        view.AddNewItem();
+        //view.AddNewItem();
     }
 
     public ExampleItem[] GetExampleItems()
