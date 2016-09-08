@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.amazonaws.AmazonClientException;
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.mobileconnectors.cognito.CognitoSyncManager;
 import com.amazonaws.regions.Regions;
@@ -22,11 +23,17 @@ import com.tbd.androidshowcase.R;
 import com.tbd.androidshowcase.presenter.ExampleListPresenter;
 import com.tbd.androidshowcase.user.IdentityManager;
 import com.tbd.androidshowcase.utility.AWSMobileClient;
+import com.tbd.androidshowcase.utility.DemoNoSQLTableBase;
+import com.tbd.androidshowcase.utility.DemoNoSQLTableFactory;
+import com.tbd.androidshowcase.utility.DynamoDBUtils;
+import com.tbd.androidshowcase.utility.ThreadUtils;
 import com.tbd.androidshowcase.view.IExampleListView;
 
 import java.util.ArrayList;
 
 public class ExampleListActivity extends AppCompatActivity implements IExampleListView {
+
+    public static final String BUNDLE_ARGS_TABLE_TITLE = "tableTitle";
 
     private ExampleListPresenter presenter;
     ArrayAdapter<String> listAdapter;
@@ -34,6 +41,8 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
     ArrayList<String> exampleList;
 
     private IdentityManager identityManager;
+
+    private DemoNoSQLTableBase demoTable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +60,10 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
         exampleListView.setAdapter( listAdapter );
         registerForContextMenu(exampleListView);
 
-    }
+        //final Bundle args = getArguments();
+
+        final String tableName = "notes";//args.getString(BUNDLE_ARGS_TABLE_TITLE);
+        demoTable = DemoNoSQLTableFactory.instance(getApplicationContext()).getNoSQLTableByTableName(tableName);    }
 
     public void onNewItemClicked(View button){ presenter.onNewItemClicked();}
 
@@ -72,10 +84,36 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
     public void AddNewItem()
     {
         // Obtain a reference to the identity manager.
-        AWSMobileClient.initializeMobileClientIfNecessary(this);
+        //AWSMobileClient.initializeMobileClientIfNecessary(this);
 
-        identityManager = AWSMobileClient.defaultMobileClient().getIdentityManager();
-        fetchUserIdentity();
+        //identityManager = AWSMobileClient.defaultMobileClient().getIdentityManager();
+        //fetchUserIdentity();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    demoTable.insertSampleData();
+                } catch (final AmazonClientException ex) {
+                    // The insertSampleData call already logs the error, so we only need to
+                    // show the error dialog to the user at this point.
+                    //DynamoDBUtils.showErrorDialogForServiceException(getActivity(), getString(R.string.nosql_dialog_title_failed_operation_text), ex);
+                    createAndShowDialog(getString(R.string.nosql_dialog_title_failed_operation_text), ex.getMessage());
+                    return;
+                }
+                ThreadUtils.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        createAndShowDialog(getString(R.string.nosql_dialog_message_added_sample_data_text), getString(R.string.nosql_dialog_title_added_sample_data_text));
+//                        final android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder(getActivity());
+//                        dialogBuilder.setTitle(R.string.nosql_dialog_title_added_sample_data_text);
+//                        dialogBuilder.setMessage(R.string.nosql_dialog_message_added_sample_data_text);
+//                        dialogBuilder.setNegativeButton(R.string.nosql_dialog_ok_text, null);
+//                        dialogBuilder.show();
+                    }
+                });
+            }
+        }).start();
 
     }
 
