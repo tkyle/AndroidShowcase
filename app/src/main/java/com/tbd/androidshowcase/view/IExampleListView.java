@@ -5,7 +5,12 @@ package com.tbd.androidshowcase.view;
  */
 public interface IExampleListView
 {
-    void AddNewItem();
+    void GetUserId();
     void AddSampleItems();
     void RemoveSampleItems();
+
+    void AddNewItem();
+    void RemoveItem();
+    void EditItem();
+    void GetItems();
 }

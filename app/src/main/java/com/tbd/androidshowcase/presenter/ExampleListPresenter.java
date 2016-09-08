@@ -22,6 +22,24 @@ public class ExampleListPresenter
     {
         view.AddNewItem();
     }
+    public void onEditItemClicked()
+    {
+        view.EditItem();
+    }
+    public void onRemoveItemClicked()
+    {
+        view.RemoveItem();
+    }
+    public void onGetItemsClicked()
+    {
+        view.GetItems();
+    }
+
+    public void onGetUserIdClicked()
+    {
+        view.GetUserId();
+    }
+
     public void onAddSampleItemsClicked()
     {
         view.AddSampleItems();

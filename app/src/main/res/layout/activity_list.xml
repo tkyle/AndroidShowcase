@@ -31,27 +31,60 @@
         android:layout_marginTop="31dp"
         android:onClick="onNewItemClicked"/>
 
-    <Button
-        android:id="@+id/addSampleItemsButton"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textAlignment="center"
-        android:text="Add Sample Items"
-        android:layout_alignParentLeft="true"
-        android:layout_alignBottom="@id/exampleListView"
-        android:onClick="onAddSampleItemsClicked"/>
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/addSampleItemsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:text="Add Sample Items"
+            android:onClick="onAddSampleItemsClicked"/>
 
-    <Button
-        android:id="@+id/removeSampleItemsButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textAlignment="center"
-        android:text="Remove Sample Items"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentLeft="@id/exampleListView"
-        android:layout_marginTop="31dp"
-        android:onClick="onRemoveSampleItemsClicked"/>
+        <Button
+            android:id="@+id/removeSampleItemsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:text="Remove Sample Items"
+            android:onClick="onRemoveSampleItemsClicked"/>
+        <Button
+            android:id="@+id/getIdButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:text="Get User Id"
+            android:onClick="onGetUserIdClicked"/>
+        <Button
+            android:id="@+id/removeItemButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:text="Remove Item"
+            android:onClick="onRemoveItemClicked"/>
+        <Button
+            android:id="@+id/editItemButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:text="Edit Item"
+            android:onClick="onEditItemClicked"/>
+        <Button
+            android:id="@+id/getItemsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:text="Get Items"
+            android:onClick="onGetItemsClicked"/>
+    </LinearLayout>
 
 </RelativeLayout>
