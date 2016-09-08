@@ -62,7 +62,7 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
 
         //final Bundle args = getArguments();
 
-        final String tableName = "notes";//args.getString(BUNDLE_ARGS_TABLE_TITLE);
+        final String tableName = "Notes";//args.getString(BUNDLE_ARGS_TABLE_TITLE);
         demoTable = DemoNoSQLTableFactory.instance(getApplicationContext()).getNoSQLTableByTableName(tableName);    }
 
     public void onNewItemClicked(View button){ presenter.onNewItemClicked();}
