@@ -94,6 +94,29 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
         // Obtain a reference to the identity manager.
         //AWSMobileClient.initializeMobileClientIfNecessary(this);
 
+        // Obtain a reference to the identity manager.
+        AWSMobileClient.initializeMobileClientIfNecessary(this);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    demoTable.addNewItem();
+                } catch (final AmazonClientException ex) {
+                    // The insertSampleData call already logs the error, so we only need to
+                    // show the error dialog to the user at this point.
+                    createAndShowDialog(getString(R.string.nosql_dialog_title_failed_operation_text), ex.getMessage());
+                    return;
+                }
+                ThreadUtils.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        createAndShowDialog(getString(R.string.nosql_dialog_message_added_sample_data_text), getString(R.string.nosql_dialog_title_added_sample_data_text)); }
+                });
+            }
+        }).start();
+
+
 
     }
 
@@ -107,7 +130,30 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
     @Override
     public void RemoveItem()
     {
-        //identityManager = AWSMobileClient.defaultMobileClient().getIdentityManager();
+        // Obtain a reference to the identity manager.
+        //AWSMobileClient.initializeMobileClientIfNecessary(this);
+
+        // Obtain a reference to the identity manager.
+        AWSMobileClient.initializeMobileClientIfNecessary(this);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    demoTable.removeItem();
+                } catch (final AmazonClientException ex) {
+                    // The insertSampleData call already logs the error, so we only need to
+                    // show the error dialog to the user at this point.
+                    createAndShowDialog(getString(R.string.nosql_dialog_title_failed_operation_text), ex.getMessage());
+                    return;
+                }
+                ThreadUtils.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        createAndShowDialog(getString(R.string.nosql_dialog_message_added_sample_data_text), getString(R.string.nosql_dialog_title_added_sample_data_text)); }
+                });
+            }
+        }).start();
     }
 
     @Override

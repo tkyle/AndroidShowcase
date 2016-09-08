@@ -51,6 +51,16 @@ public abstract class DemoNoSQLTableBase {
     public abstract void removeSampleData();
 
     /**
+     * Add new Item to table.
+     */
+    public abstract void addNewItem();
+
+    /**
+     * Remove item from table.
+     */
+    public abstract void removeItem();
+
+    /**
      * Handler interface to retrieve the supported table operations.
      */
     public interface SupportedDemoOperationsHandler {
