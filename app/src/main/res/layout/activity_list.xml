@@ -31,4 +31,27 @@
         android:layout_marginTop="31dp"
         android:onClick="onNewItemClicked"/>
 
+    <Button
+        android:id="@+id/addSampleItemsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:text="Add Sample Items"
+        android:layout_alignParentLeft="true"
+        android:layout_alignBottom="@id/exampleListView"
+        android:onClick="onAddSampleItemsClicked"/>
+
+    <Button
+        android:id="@+id/removeSampleItemsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:text="Remove Sample Items"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="@id/exampleListView"
+        android:layout_marginTop="31dp"
+        android:onClick="onRemoveSampleItemsClicked"/>
+
 </RelativeLayout>

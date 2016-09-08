@@ -66,6 +66,8 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
         demoTable = DemoNoSQLTableFactory.instance(getApplicationContext()).getNoSQLTableByTableName(tableName);    }
 
     public void onNewItemClicked(View button){ presenter.onNewItemClicked();}
+    public void onAddSampleItemsClicked(View button){ presenter.onAddSampleItemsClicked();}
+    public void onRemoveSampleItemsClicked(View button){ presenter.onRemoveSampleItemsClicked();}
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
@@ -86,6 +88,16 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
         // Obtain a reference to the identity manager.
         //AWSMobileClient.initializeMobileClientIfNecessary(this);
 
+        identityManager = AWSMobileClient.defaultMobileClient().getIdentityManager();
+        fetchUserIdentity();
+    }
+
+    @Override
+    public void AddSampleItems()
+    {
+        // Obtain a reference to the identity manager.
+        AWSMobileClient.initializeMobileClientIfNecessary(this);
+
         //identityManager = AWSMobileClient.defaultMobileClient().getIdentityManager();
         //fetchUserIdentity();
 
@@ -105,6 +117,43 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
                     @Override
                     public void run() {
                         createAndShowDialog(getString(R.string.nosql_dialog_message_added_sample_data_text), getString(R.string.nosql_dialog_title_added_sample_data_text));
+//                        final android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder(getActivity());
+//                        dialogBuilder.setTitle(R.string.nosql_dialog_title_added_sample_data_text);
+//                        dialogBuilder.setMessage(R.string.nosql_dialog_message_added_sample_data_text);
+//                        dialogBuilder.setNegativeButton(R.string.nosql_dialog_ok_text, null);
+//                        dialogBuilder.show();
+                    }
+                });
+            }
+        }).start();
+
+    }
+
+    @Override
+    public void RemoveSampleItems()
+    {
+        // Obtain a reference to the identity manager.
+        AWSMobileClient.initializeMobileClientIfNecessary(this);
+
+        //identityManager = AWSMobileClient.defaultMobileClient().getIdentityManager();
+        //fetchUserIdentity();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    demoTable.removeSampleData();
+                } catch (final AmazonClientException ex) {
+                    // The insertSampleData call already logs the error, so we only need to
+                    // show the error dialog to the user at this point.
+                    //DynamoDBUtils.showErrorDialogForServiceException(getActivity(), getString(R.string.nosql_dialog_title_failed_operation_text), ex);
+                    createAndShowDialog(getString(R.string.nosql_dialog_title_failed_operation_text), ex.getMessage());
+                    return;
+                }
+                ThreadUtils.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        createAndShowDialog("All Sample Items have been removed from your table.", "Removed Sample Data");
 //                        final android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder(getActivity());
 //                        dialogBuilder.setTitle(R.string.nosql_dialog_title_added_sample_data_text);
 //                        dialogBuilder.setMessage(R.string.nosql_dialog_message_added_sample_data_text);
