@@ -2,6 +2,7 @@ package com.tbd.androidshowcase.utility;
 
 import android.content.Context;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -68,7 +69,7 @@ public abstract class DemoNoSQLTableBase {
     /**
      * get items from table.
      */
-    public abstract void getItems();
+    public abstract List<NotesDO>  getItems();
 
     /**
      * Handler interface to retrieve the supported table operations.

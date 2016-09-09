@@ -26,10 +26,12 @@ import com.tbd.androidshowcase.utility.AWSMobileClient;
 import com.tbd.androidshowcase.utility.DemoNoSQLTableBase;
 import com.tbd.androidshowcase.utility.DemoNoSQLTableFactory;
 import com.tbd.androidshowcase.utility.DynamoDBUtils;
+import com.tbd.androidshowcase.utility.NotesDO;
 import com.tbd.androidshowcase.utility.ThreadUtils;
 import com.tbd.androidshowcase.view.IExampleListView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ExampleListActivity extends AppCompatActivity implements IExampleListView {
 
@@ -39,6 +41,8 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
     ArrayAdapter<String> listAdapter;
     ListView exampleListView;
     ArrayList<String> exampleList;
+
+    List<NotesDO> items;
 
     private IdentityManager identityManager;
 
@@ -188,6 +192,7 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
     @Override
     public void GetItems()
     {
+
         // Obtain a reference to the identity manager.
         AWSMobileClient.initializeMobileClientIfNecessary(this);
 
@@ -195,7 +200,7 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
             @Override
             public void run() {
                 try {
-                    demoTable.getItems();
+                    items = demoTable.getItems();
                 } catch (final AmazonClientException ex) {
                     // The insertSampleData call already logs the error, so we only need to
                     // show the error dialog to the user at this point.
@@ -208,6 +213,7 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
                 });
             }
         }).start();
+
     }
 
     @Override

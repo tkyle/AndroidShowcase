@@ -12,6 +12,8 @@ import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedScanLis
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
 import com.amazonaws.services.dynamodbv2.model.Condition;
+import com.amazonaws.services.dynamodbv2.model.ScanRequest;
+import com.amazonaws.services.dynamodbv2.model.ScanResult;
 import com.tbd.androidshowcase.R;
 
 import java.util.ArrayList;
@@ -829,7 +831,7 @@ public class DemoNoSQLTableNotes extends DemoNoSQLTableBase {
     }
 
     @Override
-    public void getItems() throws AmazonClientException {
+    public List<NotesDO> getItems() throws AmazonClientException {
 
         final NotesDO itemToFind = new NotesDO();
         itemToFind.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
@@ -843,6 +845,22 @@ public class DemoNoSQLTableNotes extends DemoNoSQLTableBase {
         Iterator<NotesDO> resultsIterator = results.iterator();
 
         AmazonClientException lastException = null;
+
+        final List<NotesDO> batchOfItems = new LinkedList<NotesDO>();
+        while (resultsIterator.hasNext()) {
+            // Build a batch of books to delete.
+            for (int index = 0; index < MAX_BATCH_SIZE_FOR_DELETE && resultsIterator.hasNext(); index++) {
+                batchOfItems.add(resultsIterator.next());
+            }
+        }
+
+        if (lastException != null) {
+            // Re-throw the last exception encountered to alert the user.
+            // The logs contain all the exceptions that occurred during attempted delete.
+            throw lastException;
+        }
+
+        return batchOfItems;
     }
 
     private List<DemoNoSQLOperationListItem> getSupportedDemoOperations(final Context context) {
