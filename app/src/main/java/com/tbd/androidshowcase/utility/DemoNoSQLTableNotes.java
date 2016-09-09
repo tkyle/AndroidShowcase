@@ -831,7 +831,7 @@ public class DemoNoSQLTableNotes extends DemoNoSQLTableBase {
     }
 
     @Override
-    public List<NotesDO> getItems() throws AmazonClientException {
+    public ArrayList<NotesDO> getItems() throws AmazonClientException {
 
         final NotesDO itemToFind = new NotesDO();
         itemToFind.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
@@ -860,7 +860,9 @@ public class DemoNoSQLTableNotes extends DemoNoSQLTableBase {
             throw lastException;
         }
 
-        return batchOfItems;
+        ArrayList<NotesDO> n = new ArrayList<NotesDO>();
+        n.addAll(batchOfItems);
+        return n;
     }
 
     private List<DemoNoSQLOperationListItem> getSupportedDemoOperations(final Context context) {

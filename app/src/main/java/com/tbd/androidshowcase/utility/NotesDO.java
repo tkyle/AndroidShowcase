@@ -62,5 +62,10 @@ public class NotesDO {
         this._title = _title;
     }
 
+    @Override
+    public String toString() {
+        return "Note Text: " + this._content;
+    }
+
 }
 

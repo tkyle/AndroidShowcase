@@ -23,14 +23,18 @@ import com.tbd.androidshowcase.R;
 import com.tbd.androidshowcase.presenter.ExampleListPresenter;
 import com.tbd.androidshowcase.user.IdentityManager;
 import com.tbd.androidshowcase.utility.AWSMobileClient;
+import com.tbd.androidshowcase.utility.DemoNoSQLOperationListAdapter;
+import com.tbd.androidshowcase.utility.DemoNoSQLOperationListItem;
 import com.tbd.androidshowcase.utility.DemoNoSQLTableBase;
 import com.tbd.androidshowcase.utility.DemoNoSQLTableFactory;
 import com.tbd.androidshowcase.utility.DynamoDBUtils;
+import com.tbd.androidshowcase.utility.NotesAdapter;
 import com.tbd.androidshowcase.utility.NotesDO;
 import com.tbd.androidshowcase.utility.ThreadUtils;
 import com.tbd.androidshowcase.view.IExampleListView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ExampleListActivity extends AppCompatActivity implements IExampleListView {
@@ -42,11 +46,13 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
     ListView exampleListView;
     ArrayList<String> exampleList;
 
-    List<NotesDO> items;
+    ArrayList<NotesDO> items;
 
     private IdentityManager identityManager;
 
     private DemoNoSQLTableBase demoTable;
+
+    NotesAdapter notesAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +63,18 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
 
         exampleList = presenter.GetExampleList();
         listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, exampleList);
+
+        notesAdapter = new NotesAdapter(this, new ArrayList<NotesDO>());
+
+        exampleListView = (ListView) findViewById( R.id.exampleListView );
+        exampleListView.setAdapter(notesAdapter);
         //listAdapter = new ArrayAdapter<String>(this, R.layout.examplelist_row, presenter.GetExampleList());
 
+        //presenter.onGetItemsClicked();
         // Set the ArrayAdapter as the ListView's adapter.
-        exampleListView = (ListView) findViewById( R.id.exampleListView );
-        exampleListView.setAdapter( listAdapter );
-        registerForContextMenu(exampleListView);
+
+        //exampleListView.setAdapter( listAdapter );
+        //registerForContextMenu(exampleListView);
 
         //final Bundle args = getArguments();
 
@@ -200,7 +212,7 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
             @Override
             public void run() {
                 try {
-                    items = demoTable.getItems();
+                    items = (ArrayList<NotesDO>)demoTable.getItems();
                 } catch (final AmazonClientException ex) {
                     // The insertSampleData call already logs the error, so we only need to
                     // show the error dialog to the user at this point.
@@ -214,6 +226,11 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
             }
         }).start();
 
+        notesAdapter.addAll(items);
+//        notesAdapter = new NotesAdapter(this, items);
+//
+//        exampleListView = (ListView) findViewById( R.id.exampleListView );
+//        exampleListView.setAdapter(notesAdapter);
     }
 
     @Override
