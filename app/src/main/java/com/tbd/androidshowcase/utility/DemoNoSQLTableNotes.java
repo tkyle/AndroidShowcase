@@ -828,6 +828,22 @@ public class DemoNoSQLTableNotes extends DemoNoSQLTableBase {
         }
     }
 
+    @Override
+    public void getItems() throws AmazonClientException {
+
+        final NotesDO itemToFind = new NotesDO();
+        itemToFind.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
+
+        final DynamoDBQueryExpression<NotesDO> queryExpression = new DynamoDBQueryExpression<NotesDO>()
+                .withHashKeyValues(itemToFind)
+                .withConsistentRead(false);
+
+        final PaginatedQueryList<NotesDO> results = mapper.query(NotesDO.class, queryExpression);
+
+        Iterator<NotesDO> resultsIterator = results.iterator();
+
+        AmazonClientException lastException = null;
+    }
 
     private List<DemoNoSQLOperationListItem> getSupportedDemoOperations(final Context context) {
         List<DemoNoSQLOperationListItem> noSQLOperationsList = new ArrayList<DemoNoSQLOperationListItem>();

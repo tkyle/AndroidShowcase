@@ -188,7 +188,26 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
     @Override
     public void GetItems()
     {
-        //identityManager = AWSMobileClient.defaultMobileClient().getIdentityManager();
+        // Obtain a reference to the identity manager.
+        AWSMobileClient.initializeMobileClientIfNecessary(this);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    demoTable.getItems();
+                } catch (final AmazonClientException ex) {
+                    // The insertSampleData call already logs the error, so we only need to
+                    // show the error dialog to the user at this point.
+                    createAndShowDialog(getString(R.string.nosql_dialog_title_failed_operation_text), ex.getMessage());
+                    return;
+                }
+                ThreadUtils.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() { createAndShowDialog("Retrieved all of the items from the Notes table.", "Retrieved Sample Data");}
+                });
+            }
+        }).start();
     }
 
     @Override

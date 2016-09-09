@@ -61,9 +61,14 @@ public abstract class DemoNoSQLTableBase {
     public abstract void removeItem();
 
     /**
-     * Remove item in table.
+     * edit item in table.
      */
     public abstract void editItem();
+
+    /**
+     * get items from table.
+     */
+    public abstract void getItems();
 
     /**
      * Handler interface to retrieve the supported table operations.
