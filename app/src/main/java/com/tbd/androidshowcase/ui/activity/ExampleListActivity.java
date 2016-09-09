@@ -36,6 +36,12 @@ import com.tbd.androidshowcase.view.IExampleListView;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.RunnableFuture;
 
 public class ExampleListActivity extends AppCompatActivity implements IExampleListView {
 
@@ -68,6 +74,7 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
 
         exampleListView = (ListView) findViewById( R.id.exampleListView );
         exampleListView.setAdapter(notesAdapter);
+
         //listAdapter = new ArrayAdapter<String>(this, R.layout.examplelist_row, presenter.GetExampleList());
 
         //presenter.onGetItemsClicked();
@@ -201,36 +208,43 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
         }).start();
     }
 
+    private boolean getItemsDone = false;
+
+    boolean getItemsDone() {
+        return getItemsDone;
+    }
+
     @Override
     public void GetItems()
     {
-
         // Obtain a reference to the identity manager.
         AWSMobileClient.initializeMobileClientIfNecessary(this);
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    items = (ArrayList<NotesDO>)demoTable.getItems();
-                } catch (final AmazonClientException ex) {
-                    // The insertSampleData call already logs the error, so we only need to
-                    // show the error dialog to the user at this point.
-                    createAndShowDialog(getString(R.string.nosql_dialog_title_failed_operation_text), ex.getMessage());
-                    return;
-                }
-                ThreadUtils.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() { createAndShowDialog("Retrieved all of the items from the Notes table.", "Retrieved Sample Data");}
-                });
-            }
-        }).start();
+        final Callable<ArrayList<NotesDO>> f = new Callable<ArrayList<NotesDO>>() {
 
-        notesAdapter.addAll(items);
-//        notesAdapter = new NotesAdapter(this, items);
-//
-//        exampleListView = (ListView) findViewById( R.id.exampleListView );
-//        exampleListView.setAdapter(notesAdapter);
+            @Override
+            public ArrayList<NotesDO> call() throws Exception {
+
+            return (ArrayList<NotesDO>)demoTable.getItems();
+        };
+
+        };
+
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Future<ArrayList<NotesDO>> result = executor.submit(f);
+
+        try
+        {
+            items = result.get();
+
+            notesAdapter.addAll(items);
+
+        }catch(final Exception ex)
+        {
+            // The insertSampleData call already logs the error, so we only need to
+            // show the error dialog to the user at this point.
+            createAndShowDialog(getString(R.string.nosql_dialog_title_failed_operation_text), ex.getMessage());
+        }
     }
 
     @Override
