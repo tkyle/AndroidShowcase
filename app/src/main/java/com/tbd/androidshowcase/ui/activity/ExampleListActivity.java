@@ -1,5 +1,6 @@
 package com.tbd.androidshowcase.ui.activity;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -13,9 +14,15 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
@@ -95,9 +102,9 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
     public void onAddSampleItemsClicked(View button){ presenter.onAddSampleItemsClicked();}
     public void onRemoveSampleItemsClicked(View button){ presenter.onRemoveSampleItemsClicked();}
 
-    public void onNewItemClicked(View button){ presenter.onNewItemClicked();}
+    //public void onNewItemClicked(View button){ presenter.onNewItemClicked();}
     //public void onRemoveItemClicked(View button){ presenter.onRemoveItemClicked();}
-    public void onEditItemClicked(View button){ presenter.onEditItemClicked();}
+    //public void onEditItemClicked(View button){ presenter.onEditItemClicked();}
     public void onGetItemsClicked(View button){ presenter.onGetItemsClicked();}
 
     @Override
@@ -116,7 +123,8 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch(item.getItemId()) {
             case R.id.edit:
-                EditItem();
+                //EditItem();
+                fireCustomDialog(items.get(info.position));
                 return true;
             case R.id.delete:
                 RemoveItem(items.get(info.position).getNoteId());
@@ -126,8 +134,67 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
         }
     }
 
+    // Begin Custom Dialog Code
+
+    private void fireCustomDialog(final NotesDO note) {
+        // custom dialog
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_custom);
+        TextView titleView = (TextView) dialog.findViewById(R.id.custom_title);
+        final EditText editCustom = (EditText) dialog.findViewById(R.id.custom_edit_note);
+        Button commitButton = (Button) dialog.findViewById(R.id.custom_button_commit);
+        LinearLayout rootLayout = (LinearLayout) dialog.findViewById(R.id.custom_root_layout);
+        final boolean isEditOperation = (note != null);
+        //this is for an edit
+        if (isEditOperation) {
+            titleView.setText("Edit Note");
+            editCustom.setText(note.getContent());
+            rootLayout.setBackgroundColor(getResources().getColor(R.color.blue));
+        }
+        commitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String noteText = editCustom.getText().toString();
+                if (isEditOperation) {
+                    NotesDO noteEdited = new NotesDO();
+                    noteEdited.setNoteId(note.getNoteId());
+                    noteEdited.setContent(noteText);
+
+                    //mDbAdapter.updateReminder(reminderEdited);
+                    EditItem(noteEdited);
+                    //this is for new reminder
+                } else {
+                    //mDbAdapter.createReminder(reminderText, checkBox.isChecked());
+                    NotesDO newNote = new NotesDO();
+                    newNote.setContent("NEW NOTE");
+                    newNote.setNoteId("123456");
+                    newNote.setTitle("NEW TITLE");
+
+                    AddNewItem(newNote);
+                }
+
+                // Refresh item list
+                GetItems();
+                //mCursorAdapter.changeCursor(mDbAdapter.fetchAllReminders());
+                dialog.dismiss();
+            }
+        });
+
+        Button buttonCancel = (Button) dialog.findViewById(R.id.custom_button_cancel);
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+    // End Custom Dialog Code
+
     @Override
-    public void AddNewItem()
+    public void AddNewItem(final NotesDO note)
     {
         // Obtain a reference to the identity manager.
         //AWSMobileClient.initializeMobileClientIfNecessary(this);
@@ -139,7 +206,7 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
             @Override
             public void run() {
                 try {
-                    demoTable.addNewItem();
+                    demoTable.addNewItem(note);
                 } catch (final AmazonClientException ex) {
                     // The insertSampleData call already logs the error, so we only need to
                     // show the error dialog to the user at this point.
@@ -195,7 +262,7 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
     }
 
     @Override
-    public void EditItem()
+    public void EditItem(final NotesDO note)
     {
         // Obtain a reference to the identity manager.
         //AWSMobileClient.initializeMobileClientIfNecessary(this);
@@ -207,7 +274,7 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
             @Override
             public void run() {
                 try {
-                    demoTable.editItem();
+                    demoTable.editItem(note);
                 } catch (final AmazonClientException ex) {
                     // The insertSampleData call already logs the error, so we only need to
                     // show the error dialog to the user at this point.

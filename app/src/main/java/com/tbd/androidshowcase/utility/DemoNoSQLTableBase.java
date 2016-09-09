@@ -54,7 +54,7 @@ public abstract class DemoNoSQLTableBase {
     /**
      * Add new Item to table.
      */
-    public abstract void addNewItem();
+    public abstract void addNewItem(NotesDO note);
 
     /**
      * Remove item from table.
@@ -64,7 +64,7 @@ public abstract class DemoNoSQLTableBase {
     /**
      * edit item in table.
      */
-    public abstract void editItem();
+    public abstract void editItem(NotesDO note);
 
     /**
      * get items from table.

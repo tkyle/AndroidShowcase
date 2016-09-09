@@ -743,7 +743,7 @@ public class DemoNoSQLTableNotes extends DemoNoSQLTableBase {
     }
 
     @Override
-    public void addNewItem() throws AmazonClientException {
+    public void addNewItem(NotesDO note) throws AmazonClientException {
         Log.d(LOG_TAG, "Inserting New Item data.");
         final NotesDO firstItem = new NotesDO();
 
@@ -796,14 +796,14 @@ public class DemoNoSQLTableNotes extends DemoNoSQLTableBase {
     }
 
     @Override
-    public void editItem() throws AmazonClientException {
+    public void editItem(NotesDO note) throws AmazonClientException {
 
         Log.d(LOG_TAG, "edit item");
         final NotesDO itemToFind = new NotesDO();
 
         // have to use Hash? That's why I set the ID, but I need to limit it more, so I'm using the range key?
         itemToFind.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
-        final Condition rangeKeyCondition = new Condition().withComparisonOperator(ComparisonOperator.EQ.toString()).withAttributeValueList(new AttributeValue().withS("demo-noteId-500000"));
+        final Condition rangeKeyCondition = new Condition().withComparisonOperator(ComparisonOperator.EQ.toString()).withAttributeValueList(new AttributeValue().withS(note.getNoteId()));
 
         final DynamoDBQueryExpression<NotesDO> queryExpression = new DynamoDBQueryExpression<NotesDO>()
                 .withHashKeyValues(itemToFind)
@@ -819,7 +819,8 @@ public class DemoNoSQLTableNotes extends DemoNoSQLTableBase {
         if (resultsIterator.hasNext()) {
             final NotesDO item = resultsIterator.next();
 
-            item.setContent("item was edited. changed the text.");
+            item.setContent(note.getContent());
+            item.setTitle(note.getTitle());
             // Demonstrate editing a single item.
             try {
                 mapper.save(item);

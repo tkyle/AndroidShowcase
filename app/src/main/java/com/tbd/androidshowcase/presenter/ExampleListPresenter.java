@@ -18,14 +18,14 @@ public class ExampleListPresenter
 
     public ExampleListPresenter(IExampleListView view) { this.view = view; }
 
-    public void onNewItemClicked()
-    {
-        view.AddNewItem();
-    }
-    public void onEditItemClicked()
-    {
-        view.EditItem();
-    }
+//    public void onNewItemClicked()
+//    {
+//        view.AddNewItem();
+//    }
+//    public void onEditItemClicked()
+//    {
+//        view.EditItem();
+//    }
     public void onRemoveItemClicked()
     {
         //view.RemoveItem();
