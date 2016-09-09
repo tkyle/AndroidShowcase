@@ -61,6 +61,11 @@ public abstract class DemoNoSQLTableBase {
     public abstract void removeItem();
 
     /**
+     * Remove item in table.
+     */
+    public abstract void editItem();
+
+    /**
      * Handler interface to retrieve the supported table operations.
      */
     public interface SupportedDemoOperationsHandler {

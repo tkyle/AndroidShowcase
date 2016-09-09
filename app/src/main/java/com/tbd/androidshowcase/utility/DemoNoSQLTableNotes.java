@@ -765,7 +765,6 @@ public class DemoNoSQLTableNotes extends DemoNoSQLTableBase {
         Log.d(LOG_TAG, "Removing item from data.");
         final NotesDO itemToFind = new NotesDO();
 
-
         // have to use Hash? That's why I set the ID, but I need to limit it more, so I'm using the range key?
         itemToFind.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
         final Condition rangeKeyCondition = new Condition().withComparisonOperator(ComparisonOperator.EQ.toString()).withAttributeValueList(new AttributeValue().withS("demo-noteId-500000"));
@@ -774,13 +773,6 @@ public class DemoNoSQLTableNotes extends DemoNoSQLTableBase {
                 .withHashKeyValues(itemToFind)
                 .withRangeKeyCondition("noteId", rangeKeyCondition)
                 .withConsistentRead(false);
-
-//        itemToFind.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
-//
-//        final DynamoDBQueryExpression<NotesDO> queryExpression = new DynamoDBQueryExpression<NotesDO>()
-//                .withHashKeyValues(itemToFind)
-//                .withQueryFilterEntry("noteId", new Condition("demo-noteid-5000000")
-//                .withConsistentRead(false);
 
         final PaginatedQueryList<NotesDO> results = mapper.query(NotesDO.class, queryExpression);
 
@@ -800,6 +792,42 @@ public class DemoNoSQLTableNotes extends DemoNoSQLTableBase {
             }
         }
     }
+
+    @Override
+    public void editItem() throws AmazonClientException {
+
+        Log.d(LOG_TAG, "edit item");
+        final NotesDO itemToFind = new NotesDO();
+
+        // have to use Hash? That's why I set the ID, but I need to limit it more, so I'm using the range key?
+        itemToFind.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
+        final Condition rangeKeyCondition = new Condition().withComparisonOperator(ComparisonOperator.EQ.toString()).withAttributeValueList(new AttributeValue().withS("demo-noteId-500000"));
+
+        final DynamoDBQueryExpression<NotesDO> queryExpression = new DynamoDBQueryExpression<NotesDO>()
+                .withHashKeyValues(itemToFind)
+                .withRangeKeyCondition("noteId", rangeKeyCondition)
+                .withConsistentRead(false);
+
+        final PaginatedQueryList<NotesDO> results = mapper.query(NotesDO.class, queryExpression);
+
+        Iterator<NotesDO> resultsIterator = results.iterator();
+
+        AmazonClientException lastException = null;
+
+        if (resultsIterator.hasNext()) {
+            final NotesDO item = resultsIterator.next();
+
+            item.setContent("item was edited. changed the text.");
+            // Demonstrate editing a single item.
+            try {
+                mapper.save(item);
+            } catch (final AmazonClientException ex) {
+                Log.e(LOG_TAG, "Failed editing item : " + ex.getMessage(), ex);
+                throw ex;
+            }
+        }
+    }
+
 
     private List<DemoNoSQLOperationListItem> getSupportedDemoOperations(final Context context) {
         List<DemoNoSQLOperationListItem> noSQLOperationsList = new ArrayList<DemoNoSQLOperationListItem>();
