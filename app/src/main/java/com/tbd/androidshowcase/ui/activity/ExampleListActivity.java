@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -81,7 +83,7 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
         // Set the ArrayAdapter as the ListView's adapter.
 
         //exampleListView.setAdapter( listAdapter );
-        //registerForContextMenu(exampleListView);
+        registerForContextMenu(exampleListView);
 
         //final Bundle args = getArguments();
 
@@ -102,12 +104,25 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         if (v.getId() == R.id.exampleListView) {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-            menu.setHeaderTitle(exampleList.get(info.position));
+            menu.setHeaderTitle(items.get(info.position).getContent());
 
-            String[] menuItems = getResources().getStringArray(R.array.menu);
-            for (int i = 0; i < menuItems.length; i++) {
-                menu.add(Menu.NONE, i, i, menuItems[i]);
-            }
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.note_menu, menu);
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        switch(item.getItemId()) {
+            case R.id.edit:
+                EditItem();
+                return true;
+            case R.id.delete:
+                RemoveItem();
+                return true;
+            default:
+                return super.onContextItemSelected(item);
         }
     }
 
