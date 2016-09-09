@@ -59,7 +59,7 @@ public abstract class DemoNoSQLTableBase {
     /**
      * Remove item from table.
      */
-    public abstract void removeItem();
+    public abstract void removeItem(String noteId);
 
     /**
      * edit item in table.

@@ -96,7 +96,7 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
     public void onRemoveSampleItemsClicked(View button){ presenter.onRemoveSampleItemsClicked();}
 
     public void onNewItemClicked(View button){ presenter.onNewItemClicked();}
-    public void onRemoveItemClicked(View button){ presenter.onRemoveItemClicked();}
+    //public void onRemoveItemClicked(View button){ presenter.onRemoveItemClicked();}
     public void onEditItemClicked(View button){ presenter.onEditItemClicked();}
     public void onGetItemsClicked(View button){ presenter.onGetItemsClicked();}
 
@@ -119,7 +119,7 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
                 EditItem();
                 return true;
             case R.id.delete:
-                RemoveItem();
+                RemoveItem(items.get(info.position).getNoteId());
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -166,7 +166,7 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
     }
 
     @Override
-    public void RemoveItem()
+    public void RemoveItem(final String noteId)
     {
         // Obtain a reference to the identity manager.
         //AWSMobileClient.initializeMobileClientIfNecessary(this);
@@ -178,7 +178,7 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
             @Override
             public void run() {
                 try {
-                    demoTable.removeItem();
+                    demoTable.removeItem(noteId);
                 } catch (final AmazonClientException ex) {
                     // The insertSampleData call already logs the error, so we only need to
                     // show the error dialog to the user at this point.

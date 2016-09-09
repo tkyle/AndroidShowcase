@@ -61,14 +61,14 @@
             android:textAlignment="center"
             android:text="Get User Id"
             android:onClick="onGetUserIdClicked"/>
-        <Button
+<!--        <Button
             android:id="@+id/removeItemButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textAlignment="center"
             android:text="Remove Item"
-            android:onClick="onRemoveItemClicked"/>
+            android:onClick="onRemoveItemClicked"/>-->
         <Button
             android:id="@+id/editItemButton"
             android:layout_width="wrap_content"

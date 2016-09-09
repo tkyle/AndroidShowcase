@@ -10,7 +10,7 @@ public interface IExampleListView
     void RemoveSampleItems();
 
     void AddNewItem();
-    void RemoveItem();
+    void RemoveItem(String noteId);
     void EditItem();
     void GetItems();
 }

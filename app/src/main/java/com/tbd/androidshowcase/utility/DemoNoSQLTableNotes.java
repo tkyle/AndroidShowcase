@@ -762,14 +762,14 @@ public class DemoNoSQLTableNotes extends DemoNoSQLTableBase {
     }
 
     @Override
-    public void removeItem() throws AmazonClientException {
+    public void removeItem(String noteId) throws AmazonClientException {
 
         Log.d(LOG_TAG, "Removing item from data.");
         final NotesDO itemToFind = new NotesDO();
 
         // have to use Hash? That's why I set the ID, but I need to limit it more, so I'm using the range key?
         itemToFind.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
-        final Condition rangeKeyCondition = new Condition().withComparisonOperator(ComparisonOperator.EQ.toString()).withAttributeValueList(new AttributeValue().withS("demo-noteId-500000"));
+        final Condition rangeKeyCondition = new Condition().withComparisonOperator(ComparisonOperator.EQ.toString()).withAttributeValueList(new AttributeValue().withS(noteId));
 
         final DynamoDBQueryExpression<NotesDO> queryExpression = new DynamoDBQueryExpression<NotesDO>()
                 .withHashKeyValues(itemToFind)

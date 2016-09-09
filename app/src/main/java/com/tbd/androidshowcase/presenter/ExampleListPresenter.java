@@ -28,7 +28,7 @@ public class ExampleListPresenter
     }
     public void onRemoveItemClicked()
     {
-        view.RemoveItem();
+        //view.RemoveItem();
     }
     public void onGetItemsClicked()
     {
