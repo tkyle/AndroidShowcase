@@ -168,13 +168,14 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
                     //mDbAdapter.createReminder(reminderText, checkBox.isChecked());
                     NotesDO newNote = new NotesDO();
                     newNote.setContent(editCustom.getText().toString());
-                    newNote.setNoteId("123456");
+                    newNote.setNoteId(java.util.UUID.randomUUID().toString());
                     newNote.setTitle("NEW TITLE");
 
                     AddNewItem(newNote);
                 }
 
                 // Refresh item list
+                notesAdapter.clear();
                 GetItems();
                 //mCursorAdapter.changeCursor(mDbAdapter.fetchAllReminders());
                 dialog.dismiss();
