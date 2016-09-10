@@ -102,7 +102,7 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
     public void onAddSampleItemsClicked(View button){ presenter.onAddSampleItemsClicked();}
     public void onRemoveSampleItemsClicked(View button){ presenter.onRemoveSampleItemsClicked();}
 
-    //public void onNewItemClicked(View button){ presenter.onNewItemClicked();}
+    public void onNewItemClicked(View button){ fireCustomDialog(null); }
     //public void onRemoveItemClicked(View button){ presenter.onRemoveItemClicked();}
     //public void onEditItemClicked(View button){ presenter.onEditItemClicked();}
     public void onGetItemsClicked(View button){ presenter.onGetItemsClicked();}
@@ -167,7 +167,7 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
                 } else {
                     //mDbAdapter.createReminder(reminderText, checkBox.isChecked());
                     NotesDO newNote = new NotesDO();
-                    newNote.setContent("NEW NOTE");
+                    newNote.setContent(editCustom.getText().toString());
                     newNote.setNoteId("123456");
                     newNote.setTitle("NEW TITLE");
 

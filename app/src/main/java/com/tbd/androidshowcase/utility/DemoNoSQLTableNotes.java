@@ -748,9 +748,9 @@ public class DemoNoSQLTableNotes extends DemoNoSQLTableBase {
         final NotesDO firstItem = new NotesDO();
 
         firstItem.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
-        firstItem.setNoteId("demo-noteId-500000");
-        firstItem.setContent("New Data Here");
-        firstItem.setTitle("New Title Here");
+        firstItem.setNoteId(note.getNoteId());
+        firstItem.setContent(note.getContent());
+        firstItem.setTitle(note.getTitle());
         AmazonClientException lastException = null;
 
         try {
