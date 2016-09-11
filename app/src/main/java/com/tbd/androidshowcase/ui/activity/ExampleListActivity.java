@@ -39,8 +39,11 @@ import com.tbd.androidshowcase.utility.DemoNoSQLOperationListItem;
 import com.tbd.androidshowcase.utility.DemoNoSQLTableBase;
 import com.tbd.androidshowcase.utility.DemoNoSQLTableFactory;
 import com.tbd.androidshowcase.utility.DynamoDBUtils;
+import com.tbd.androidshowcase.utility.NoSQLTableBase;
 import com.tbd.androidshowcase.utility.NotesAdapter;
 import com.tbd.androidshowcase.utility.NotesDO;
+import com.tbd.androidshowcase.utility.Product;
+import com.tbd.androidshowcase.utility.TableFactory;
 import com.tbd.androidshowcase.utility.ThreadUtils;
 import com.tbd.androidshowcase.view.IExampleListView;
 
@@ -67,7 +70,8 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
 
     private IdentityManager identityManager;
 
-    private DemoNoSQLTableBase demoTable;
+    //private DemoNoSQLTableBase demoTable;
+    private NoSQLTableBase demoTable;
 
     NotesAdapter notesAdapter;
 
@@ -96,8 +100,10 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
 
         //final Bundle args = getArguments();
 
-        final String tableName = "Notes";//args.getString(BUNDLE_ARGS_TABLE_TITLE);
-        demoTable = DemoNoSQLTableFactory.instance(getApplicationContext()).getNoSQLTableByTableName(tableName);
+        //final String tableName = "Notes";//args.getString(BUNDLE_ARGS_TABLE_TITLE);
+        final String tableName = "Products";//args.getString(BUNDLE_ARGS_TABLE_TITLE);
+        //demoTable = DemoNoSQLTableFactory.instance(getApplicationContext()).getNoSQLTableByTableName(tableName);
+        demoTable = TableFactory.instance(getApplicationContext()).getNoSQLTableByTableName(tableName);
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.custom_toolbar);
         setSupportActionBar(myToolbar);
@@ -175,12 +181,18 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
                     //this is for new reminder
                 } else {
                     //mDbAdapter.createReminder(reminderText, checkBox.isChecked());
-                    NotesDO newNote = new NotesDO();
+   /*                 NotesDO newNote = new NotesDO();
                     newNote.setContent(editCustom.getText().toString());
                     newNote.setNoteId(java.util.UUID.randomUUID().toString());
-                    newNote.setTitle("NEW TITLE");
+                    newNote.setTitle("NEW TITLE");*/
 
-                    AddNewItem(newNote);
+                    Product newProduct = new Product();
+                    newProduct.setName(editCustom.getText().toString());
+                    newProduct.setproductId(java.util.UUID.randomUUID().toString());
+                    newProduct.setDescription("NEW Desc");
+                    newProduct.setCost(100.00);
+
+                    AddNewItem(newProduct);
                 }
 
                 // Refresh item list
@@ -204,7 +216,7 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
     // End Custom Dialog Code
 
     @Override
-    public void AddNewItem(final NotesDO note)
+    public void AddNewItem(final Product product)
     {
         // Obtain a reference to the identity manager.
         //AWSMobileClient.initializeMobileClientIfNecessary(this);
@@ -216,7 +228,7 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
             @Override
             public void run() {
                 try {
-                    demoTable.addNewItem(note);
+                    demoTable.addNewItem(product);
                 } catch (final AmazonClientException ex) {
                     // The insertSampleData call already logs the error, so we only need to
                     // show the error dialog to the user at this point.
@@ -349,7 +361,7 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
             @Override
             public void run() {
                 try {
-                    demoTable.insertSampleData();
+                    //demoTable.insertSampleData();
                 } catch (final AmazonClientException ex) {
                     // The insertSampleData call already logs the error, so we only need to
                     // show the error dialog to the user at this point.
@@ -376,7 +388,7 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
             @Override
             public void run() {
                 try {
-                    demoTable.removeSampleData();
+                    //demoTable.removeSampleData();
                 } catch (final AmazonClientException ex) {
                     // The insertSampleData call already logs the error, so we only need to
                     // show the error dialog to the user at this point.
