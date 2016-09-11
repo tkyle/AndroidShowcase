@@ -347,6 +347,8 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
         {
             items = result.get();
 
+            productsAdapter.clear();
+
             productsAdapter.addAll((ArrayList<Product>)items);
 
         }catch(final Exception ex)

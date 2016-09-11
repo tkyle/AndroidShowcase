@@ -64,28 +64,28 @@ public class ProductTable extends NoSQLTableBase
     }
 
     @Override
-    public void removeItem(String noteId) throws AmazonClientException {
+    public void removeItem(String productId) throws AmazonClientException {
 
         Log.d(LOG_TAG, "Removing item from data.");
-        final NotesDO itemToFind = new NotesDO();
+        final Product itemToFind = new Product();
 
         // have to use Hash? That's why I set the ID, but I need to limit it more, so I'm using the range key?
         itemToFind.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
-        final Condition rangeKeyCondition = new Condition().withComparisonOperator(ComparisonOperator.EQ.toString()).withAttributeValueList(new AttributeValue().withS(noteId));
+        final Condition rangeKeyCondition = new Condition().withComparisonOperator(ComparisonOperator.EQ.toString()).withAttributeValueList(new AttributeValue().withS(productId));
 
-        final DynamoDBQueryExpression<NotesDO> queryExpression = new DynamoDBQueryExpression<NotesDO>()
+        final DynamoDBQueryExpression<Product> queryExpression = new DynamoDBQueryExpression<Product>()
                 .withHashKeyValues(itemToFind)
-                .withRangeKeyCondition("noteId", rangeKeyCondition)
+                .withRangeKeyCondition("ProductId", rangeKeyCondition)
                 .withConsistentRead(false);
 
-        final PaginatedQueryList<NotesDO> results = mapper.query(NotesDO.class, queryExpression);
+        final PaginatedQueryList<Product> results = mapper.query(Product.class, queryExpression);
 
-        Iterator<NotesDO> resultsIterator = results.iterator();
+        Iterator<Product> resultsIterator = results.iterator();
 
         AmazonClientException lastException = null;
 
         if (resultsIterator.hasNext()) {
-            final NotesDO item = resultsIterator.next();
+            final Product item = resultsIterator.next();
 
             // Demonstrate deleting a single item.
             try {
@@ -106,12 +106,12 @@ public class ProductTable extends NoSQLTableBase
         final Product itemToFind = new Product();
 
         // have to use Hash? That's why I set the ID, but I need to limit it more, so I'm using the range key?
-        itemToFind.setProductId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
+        itemToFind.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
         final Condition rangeKeyCondition = new Condition().withComparisonOperator(ComparisonOperator.EQ.toString()).withAttributeValueList(new AttributeValue().withS(product.getProductId()));
 
         final DynamoDBQueryExpression<Product> queryExpression = new DynamoDBQueryExpression<Product>()
                 .withHashKeyValues(itemToFind)
-                //.withRangeKeyCondition("productId", rangeKeyCondition)
+                .withRangeKeyCondition("ProductId", rangeKeyCondition)
                 .withConsistentRead(false);
 
         final PaginatedQueryList<Product> results = mapper.query(Product.class, queryExpression);

@@ -28,6 +28,7 @@ public class Product implements ITableObject
         this._userId = _userId;
     }
 
+    @DynamoDBRangeKey(attributeName = "ProductId")
     @DynamoDBAttribute(attributeName = "ProductId")
     public String getProductId() {
         return _productId;

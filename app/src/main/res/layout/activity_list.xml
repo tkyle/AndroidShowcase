@@ -15,6 +15,7 @@
         android:background="@color/white"
         android:layout_height="wrap_content"
         tools:listitem="@layout/examplelist_row"
+        android:paddingTop="40dp"
         android:layout_alignParentTop="true"/>
 
     <LinearLayout
