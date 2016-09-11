@@ -42,11 +42,12 @@ public class ExampleListPresenter
 
     public void onAddSampleItemsClicked()
     {
-        view.AddSampleItems();
+        //view.AddSampleItems();
     }
+
     public void onRemoveSampleItemsClicked()
     {
-        view.RemoveSampleItems();
+        //view.RemoveSampleItems();
     }
 
     public ExampleItem[] GetExampleItems()

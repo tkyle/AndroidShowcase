@@ -1,5 +1,6 @@
 package com.tbd.androidshowcase.utility;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -8,8 +9,8 @@ import java.util.List;
 public abstract class NoSQLTableBase
 {
     public abstract String getTableName();
-    public abstract void addNewItem(ITableObject note);
-    public abstract void removeItem(String noteId);
-    public abstract void editItem(NotesDO note);
-    public abstract List<NotesDO> getItems();
+    public abstract void addNewItem(ITableObject tableObject);
+    public abstract void removeItem(String objectId);
+    public abstract void editItem(ITableObject tableObject);
+    public abstract ArrayList<ITableObject> getItems();
 }

@@ -13,17 +13,26 @@ import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBTable;
 @DynamoDBTable(tableName = "Products")
 public class Product implements ITableObject
 {
+    private String _userId;
     private String _productId;
     private String _name;
     private String _description;
     private Double _cost;
 
-    @DynamoDBHashKey(attributeName = "ProductId")
-    @DynamoDBIndexHashKey(attributeName = "ProductId")
+    @DynamoDBHashKey(attributeName = "UserId")
+    @DynamoDBIndexHashKey(attributeName = "UserId", globalSecondaryIndexName = "DateSorted")
+    public String getUserId() {
+        return _userId;
+    }
+    public void setUserId(final String _userId) {
+        this._userId = _userId;
+    }
+
+    @DynamoDBAttribute(attributeName = "ProductId")
     public String getProductId() {
         return _productId;
     }
-    public void setproductId(final String _productId) {
+    public void setProductId(final String _productId) {
         this._productId = _productId;
     }
 

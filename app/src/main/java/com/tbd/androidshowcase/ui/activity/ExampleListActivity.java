@@ -39,10 +39,12 @@ import com.tbd.androidshowcase.utility.DemoNoSQLOperationListItem;
 import com.tbd.androidshowcase.utility.DemoNoSQLTableBase;
 import com.tbd.androidshowcase.utility.DemoNoSQLTableFactory;
 import com.tbd.androidshowcase.utility.DynamoDBUtils;
+import com.tbd.androidshowcase.utility.ITableObject;
 import com.tbd.androidshowcase.utility.NoSQLTableBase;
 import com.tbd.androidshowcase.utility.NotesAdapter;
 import com.tbd.androidshowcase.utility.NotesDO;
 import com.tbd.androidshowcase.utility.Product;
+import com.tbd.androidshowcase.utility.ProductsAdapter;
 import com.tbd.androidshowcase.utility.TableFactory;
 import com.tbd.androidshowcase.utility.ThreadUtils;
 import com.tbd.androidshowcase.view.IExampleListView;
@@ -66,14 +68,14 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
     ListView exampleListView;
     ArrayList<String> exampleList;
 
-    ArrayList<NotesDO> items;
+    ArrayList<? extends ITableObject> items;
 
     private IdentityManager identityManager;
 
     //private DemoNoSQLTableBase demoTable;
     private NoSQLTableBase demoTable;
 
-    NotesAdapter notesAdapter;
+    ProductsAdapter productsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,10 +87,10 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
         exampleList = presenter.GetExampleList();
         listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, exampleList);
 
-        notesAdapter = new NotesAdapter(this, new ArrayList<NotesDO>());
+        productsAdapter = new ProductsAdapter(this, new ArrayList<Product>());
 
         exampleListView = (ListView) findViewById( R.id.exampleListView );
-        exampleListView.setAdapter(notesAdapter);
+        exampleListView.setAdapter(productsAdapter);
 
         //listAdapter = new ArrayAdapter<String>(this, R.layout.examplelist_row, presenter.GetExampleList());
 
@@ -126,7 +128,7 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         if (v.getId() == R.id.exampleListView) {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-            menu.setHeaderTitle(items.get(info.position).getContent());
+            menu.setHeaderTitle(((Product)items.get(info.position)).getName());
 
             MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.note_menu, menu);
@@ -142,7 +144,7 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
                 fireCustomDialog(items.get(info.position));
                 return true;
             case R.id.delete:
-                RemoveItem(items.get(info.position).getNoteId());
+                RemoveItem(((Product)items.get(info.position)).getProductId());
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -151,7 +153,10 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
 
     // Begin Custom Dialog Code
 
-    private void fireCustomDialog(final NotesDO note) {
+    private void fireCustomDialog(final ITableObject tableObject) {
+
+        final Product product = tableObject != null ? (Product)tableObject : null;
+
         // custom dialog
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -160,24 +165,25 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
         final EditText editCustom = (EditText) dialog.findViewById(R.id.custom_edit_note);
         Button commitButton = (Button) dialog.findViewById(R.id.custom_button_commit);
         LinearLayout rootLayout = (LinearLayout) dialog.findViewById(R.id.custom_root_layout);
-        final boolean isEditOperation = (note != null);
+        final boolean isEditOperation = (product != null);
         //this is for an edit
         if (isEditOperation) {
-            titleView.setText("Edit Note");
-            editCustom.setText(note.getContent());
+            titleView.setText("Edit Product");
+            editCustom.setText(product.getName());
             rootLayout.setBackgroundColor(getResources().getColor(R.color.blue));
         }
         commitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String noteText = editCustom.getText().toString();
+                String nameText = editCustom.getText().toString();
                 if (isEditOperation) {
-                    NotesDO noteEdited = new NotesDO();
-                    noteEdited.setNoteId(note.getNoteId());
-                    noteEdited.setContent(noteText);
+                    Product productEdited = new Product();
+                    productEdited.setProductId(product.getProductId());
+                    productEdited.setName(nameText);
+                    productEdited.setDescription(product.getDescription());
 
                     //mDbAdapter.updateReminder(reminderEdited);
-                    EditItem(noteEdited);
+                    EditItem(productEdited);
                     //this is for new reminder
                 } else {
                     //mDbAdapter.createReminder(reminderText, checkBox.isChecked());
@@ -188,7 +194,7 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
 
                     Product newProduct = new Product();
                     newProduct.setName(editCustom.getText().toString());
-                    newProduct.setproductId(java.util.UUID.randomUUID().toString());
+                    newProduct.setProductId(java.util.UUID.randomUUID().toString());
                     newProduct.setDescription("NEW Desc");
                     newProduct.setCost(100.00);
 
@@ -196,7 +202,7 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
                 }
 
                 // Refresh item list
-                notesAdapter.clear();
+                productsAdapter.clear();
                 GetItems();
                 //mCursorAdapter.changeCursor(mDbAdapter.fetchAllReminders());
                 dialog.dismiss();
@@ -255,7 +261,7 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
     }
 
     @Override
-    public void RemoveItem(final String noteId)
+    public void RemoveItem(final String productId)
     {
         // Obtain a reference to the identity manager.
         //AWSMobileClient.initializeMobileClientIfNecessary(this);
@@ -267,7 +273,7 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
             @Override
             public void run() {
                 try {
-                    demoTable.removeItem(noteId);
+                    demoTable.removeItem(productId);
                 } catch (final AmazonClientException ex) {
                     // The insertSampleData call already logs the error, so we only need to
                     // show the error dialog to the user at this point.
@@ -284,7 +290,7 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
     }
 
     @Override
-    public void EditItem(final NotesDO note)
+    public void EditItem(final Product product)
     {
         // Obtain a reference to the identity manager.
         //AWSMobileClient.initializeMobileClientIfNecessary(this);
@@ -296,7 +302,7 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
             @Override
             public void run() {
                 try {
-                    demoTable.editItem(note);
+                    demoTable.editItem(product);
                 } catch (final AmazonClientException ex) {
                     // The insertSampleData call already logs the error, so we only need to
                     // show the error dialog to the user at this point.
@@ -324,24 +330,24 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
         // Obtain a reference to the identity manager.
         AWSMobileClient.initializeMobileClientIfNecessary(this);
 
-        final Callable<ArrayList<NotesDO>> f = new Callable<ArrayList<NotesDO>>() {
+        final Callable<ArrayList<ITableObject>> f = new Callable<ArrayList<ITableObject>>() {
 
             @Override
-            public ArrayList<NotesDO> call() throws Exception {
+            public ArrayList<ITableObject> call() throws Exception {
 
-            return (ArrayList<NotesDO>)demoTable.getItems();
+            return (ArrayList<ITableObject>)demoTable.getItems();
         };
 
         };
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        Future<ArrayList<NotesDO>> result = executor.submit(f);
+        Future<ArrayList<ITableObject>> result = executor.submit(f);
 
         try
         {
             items = result.get();
 
-            notesAdapter.addAll(items);
+            productsAdapter.addAll((ArrayList<Product>)items);
 
         }catch(final Exception ex)
         {
@@ -351,7 +357,7 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
         }
     }
 
-    @Override
+
     public void AddSampleItems()
     {
         // Obtain a reference to the identity manager.
@@ -378,7 +384,7 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
 
     }
 
-    @Override
+
     public void RemoveSampleItems()
     {
         // Obtain a reference to the identity manager.

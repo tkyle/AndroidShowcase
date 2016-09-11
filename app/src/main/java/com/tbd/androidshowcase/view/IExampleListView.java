@@ -9,11 +9,11 @@ import com.tbd.androidshowcase.utility.Product;
 public interface IExampleListView
 {
     void GetUserId();
-    void AddSampleItems();
-    void RemoveSampleItems();
+    //void AddSampleItems();
+    //void RemoveSampleItems();
 
     void AddNewItem(Product product);
-    void RemoveItem(String noteId);
-    void EditItem(NotesDO note);
+    void RemoveItem(String productId);
+    void EditItem(Product product);
     void GetItems();
 }

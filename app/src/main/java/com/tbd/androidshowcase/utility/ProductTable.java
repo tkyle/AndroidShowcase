@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapperConfig;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBQueryExpression;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedQueryList;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
@@ -46,8 +47,8 @@ public class ProductTable extends NoSQLTableBase
         Log.d(LOG_TAG, "Inserting new product data.");
         final Product newProduct = new Product();
 
-        //firstItem.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
-        newProduct.setproductId(product.getProductId());
+        newProduct.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
+        newProduct.setProductId(product.getProductId());
         newProduct.setName(product.getName());
         newProduct.setDescription(product.getDescription());
         newProduct.setCost(product.getCost());
@@ -97,31 +98,33 @@ public class ProductTable extends NoSQLTableBase
     }
 
     @Override
-    public void editItem(NotesDO note) throws AmazonClientException {
+    public void editItem(ITableObject tableObject) throws AmazonClientException {
+
+        Product product = (Product)tableObject;
 
         Log.d(LOG_TAG, "edit item");
-        final NotesDO itemToFind = new NotesDO();
+        final Product itemToFind = new Product();
 
         // have to use Hash? That's why I set the ID, but I need to limit it more, so I'm using the range key?
-        itemToFind.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
-        final Condition rangeKeyCondition = new Condition().withComparisonOperator(ComparisonOperator.EQ.toString()).withAttributeValueList(new AttributeValue().withS(note.getNoteId()));
+        itemToFind.setProductId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
+        final Condition rangeKeyCondition = new Condition().withComparisonOperator(ComparisonOperator.EQ.toString()).withAttributeValueList(new AttributeValue().withS(product.getProductId()));
 
-        final DynamoDBQueryExpression<NotesDO> queryExpression = new DynamoDBQueryExpression<NotesDO>()
+        final DynamoDBQueryExpression<Product> queryExpression = new DynamoDBQueryExpression<Product>()
                 .withHashKeyValues(itemToFind)
-                .withRangeKeyCondition("noteId", rangeKeyCondition)
+                //.withRangeKeyCondition("productId", rangeKeyCondition)
                 .withConsistentRead(false);
 
-        final PaginatedQueryList<NotesDO> results = mapper.query(NotesDO.class, queryExpression);
+        final PaginatedQueryList<Product> results = mapper.query(Product.class, queryExpression);
 
-        Iterator<NotesDO> resultsIterator = results.iterator();
+        Iterator<Product> resultsIterator = results.iterator();
 
         AmazonClientException lastException = null;
 
         if (resultsIterator.hasNext()) {
-            final NotesDO item = resultsIterator.next();
+            final Product item = resultsIterator.next();
 
-            item.setContent(note.getContent());
-            item.setTitle(note.getTitle());
+            item.setName(product.getName());
+            item.setDescription(product.getDescription());
             // Demonstrate editing a single item.
             try {
                 mapper.save(item);
@@ -133,22 +136,22 @@ public class ProductTable extends NoSQLTableBase
     }
 
     @Override
-    public ArrayList<NotesDO> getItems() throws AmazonClientException {
+    public ArrayList<ITableObject> getItems() throws AmazonClientException {
 
-        final NotesDO itemToFind = new NotesDO();
+        final Product itemToFind = new Product();
         itemToFind.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
 
-        final DynamoDBQueryExpression<NotesDO> queryExpression = new DynamoDBQueryExpression<NotesDO>()
+        final DynamoDBQueryExpression<Product> queryExpression = new DynamoDBQueryExpression<Product>()
                 .withHashKeyValues(itemToFind)
                 .withConsistentRead(false);
 
-        final PaginatedQueryList<NotesDO> results = mapper.query(NotesDO.class, queryExpression);
+        final PaginatedQueryList<Product> results = mapper.query(Product.class, queryExpression);
 
-        Iterator<NotesDO> resultsIterator = results.iterator();
+        Iterator<Product> resultsIterator = results.iterator();
 
         AmazonClientException lastException = null;
 
-        final List<NotesDO> batchOfItems = new LinkedList<NotesDO>();
+        final List<ITableObject> batchOfItems = new LinkedList<ITableObject>();
         while (resultsIterator.hasNext()) {
             // Build a batch of books to delete.
             for (int index = 0; index < MAX_BATCH_SIZE_FOR_DELETE && resultsIterator.hasNext(); index++) {
@@ -162,7 +165,7 @@ public class ProductTable extends NoSQLTableBase
             throw lastException;
         }
 
-        ArrayList<NotesDO> n = new ArrayList<NotesDO>();
+        ArrayList<ITableObject> n = new ArrayList<ITableObject>();
         n.addAll(batchOfItems);
         return n;
     }
