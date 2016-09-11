@@ -3,6 +3,7 @@ package com.tbd.androidshowcase.ui.activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.tbd.androidshowcase.R;
@@ -26,6 +27,9 @@ public class MainActivity extends AppCompatActivity implements IMainView
         setContentView(R.layout.activity_main);
 
         presenter = new MainPresenter(MainActivity.this);
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.custom_toolbar);
+        setSupportActionBar(myToolbar);
     }
 
     // endregion

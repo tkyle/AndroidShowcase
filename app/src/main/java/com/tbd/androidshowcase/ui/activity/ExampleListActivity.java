@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -95,7 +97,14 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
         //final Bundle args = getArguments();
 
         final String tableName = "Notes";//args.getString(BUNDLE_ARGS_TABLE_TITLE);
-        demoTable = DemoNoSQLTableFactory.instance(getApplicationContext()).getNoSQLTableByTableName(tableName);    }
+        demoTable = DemoNoSQLTableFactory.instance(getApplicationContext()).getNoSQLTableByTableName(tableName);
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.custom_toolbar);
+        setSupportActionBar(myToolbar);
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
+
+    }
 
     public void onGetUserIdClicked(View button){ presenter.onGetUserIdClicked();}
 

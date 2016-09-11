@@ -3,8 +3,10 @@ package com.tbd.androidshowcase.ui.activity;
 import android.content.Intent;
 import android.hardware.SensorManager;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.OrientationEventListener;
 import android.widget.TextView;
@@ -30,6 +32,11 @@ public class RotationActivity extends AppCompatActivity implements IRotationView
         presenter = new RotationPresenter(RotationActivity.this);
 
         setupRotationEventListener();
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.custom_toolbar);
+        setSupportActionBar(myToolbar);
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
     }
 
     private void setupRotationEventListener()
