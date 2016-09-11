@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.tbd.androidshowcase.R;
 
@@ -27,7 +28,11 @@ public class MoveCircleActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(new MyView(this));
+        setContentView(R.layout.activity_movecircle);
+
+        LinearLayout linearLayout = (LinearLayout)findViewById(R.id.movecirclelayout);
+
+        linearLayout.addView(new MyView(this));
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.custom_toolbar);
         setSupportActionBar(myToolbar);
