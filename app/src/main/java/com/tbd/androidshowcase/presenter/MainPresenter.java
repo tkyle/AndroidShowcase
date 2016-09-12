@@ -23,9 +23,4 @@ public class MainPresenter
     {
         view.openMoveCircleActivity();
     }
-
-    public void onRotationActivityClicked()
-    {
-        view.openRotationActivity();
-    }
 }

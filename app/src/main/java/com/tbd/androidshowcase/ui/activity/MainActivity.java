@@ -38,10 +38,6 @@ public class MainActivity extends AppCompatActivity implements IMainView
 
     public void onProductListActivityClicked(View button){ presenter.onProductListActivityClicked();}
     public void onMoveCircleActivityClicked(View button) { presenter.onMoveCircleActivityClicked(); }
-    public void onRotationActivityClicked(View button)
-    {
-        presenter.onRotationActivityClicked();
-    }
 
     // endregion
 
@@ -58,13 +54,6 @@ public class MainActivity extends AppCompatActivity implements IMainView
     public void openMoveCircleActivity()
     {
         Intent intent = new Intent(this, MoveCircleActivity.class);
-        startActivity(intent);
-    }
-
-    @Override
-    public void openRotationActivity()
-    {
-        Intent intent = new Intent(this, RotationActivity.class);
         startActivity(intent);
     }
 

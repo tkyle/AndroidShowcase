@@ -7,5 +7,4 @@ public interface IMainView
 {
     void openProductListActivity();
     void openMoveCircleActivity();
-    void openRotationActivity();
 }
