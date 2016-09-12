@@ -79,6 +79,8 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
 
+        GetItems();
+
     }
 
     public void onGetUserIdClicked(View button){ presenter.onGetUserIdClicked();}

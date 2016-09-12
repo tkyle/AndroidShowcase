@@ -37,22 +37,6 @@
                 android:textAlignment="center"
                 android:text="New"
                 android:onClick="onNewItemClicked"/>
-            <Button
-                android:id="@+id/getIdButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textAlignment="center"
-                android:text="Get User Id"
-                android:onClick="onGetUserIdClicked"/>
-            <Button
-                android:id="@+id/getItemsButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textAlignment="center"
-                android:text="Get Items"
-                android:onClick="onGetItemsClicked"/>
         </LinearLayout>
 
     </LinearLayout>
