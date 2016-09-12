@@ -29,6 +29,7 @@
             android:gravity="center"
             android:textAlignment="center"
             android:text="New"
+            android:background="@drawable/roundbutton"
             android:onClick="onNewItemClicked"/>
 
 </RelativeLayout>
