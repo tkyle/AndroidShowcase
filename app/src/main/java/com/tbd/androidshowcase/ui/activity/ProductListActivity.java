@@ -3,6 +3,7 @@ package com.tbd.androidshowcase.ui.activity;
 import android.app.Dialog;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -57,6 +58,8 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
 
     ProductsAdapter productsAdapter;
 
+    FloatingActionButton newButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +71,15 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
 
         exampleListView = (ListView) findViewById( R.id.exampleListView );
         exampleListView.setAdapter(productsAdapter);
+
+        // FloatingActionButton is using a wrapper (it seems) and it doesn't like the onClick being
+        // declared in XML. May be able to fix this by updating the design library.
+        // This is working for now.
+        newButton = (FloatingActionButton)findViewById(R.id.newButton);
+        newButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                fireCustomDialog(null);
+            }});
 
         registerForContextMenu(exampleListView);
 
