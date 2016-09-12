@@ -1,6 +1,5 @@
 package com.tbd.androidshowcase.view;
 
-import com.tbd.androidshowcase.utility.NotesDO;
 import com.tbd.androidshowcase.utility.Product;
 
 /**

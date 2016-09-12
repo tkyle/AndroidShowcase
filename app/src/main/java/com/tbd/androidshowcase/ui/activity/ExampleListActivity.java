@@ -1,8 +1,6 @@
 package com.tbd.androidshowcase.ui.activity;
 
 import android.app.Dialog;
-import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v7.app.ActionBar;
@@ -12,7 +10,6 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.ContextMenu;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,29 +17,18 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.amazonaws.AmazonClientException;
-import com.amazonaws.auth.CognitoCachingCredentialsProvider;
-import com.amazonaws.mobileconnectors.cognito.CognitoSyncManager;
-import com.amazonaws.regions.Regions;
 import com.tbd.androidshowcase.R;
 import com.tbd.androidshowcase.presenter.ExampleListPresenter;
 import com.tbd.androidshowcase.user.IdentityManager;
 import com.tbd.androidshowcase.utility.AWSMobileClient;
-import com.tbd.androidshowcase.utility.DemoNoSQLOperationListAdapter;
-import com.tbd.androidshowcase.utility.DemoNoSQLOperationListItem;
-import com.tbd.androidshowcase.utility.DemoNoSQLTableBase;
-import com.tbd.androidshowcase.utility.DemoNoSQLTableFactory;
-import com.tbd.androidshowcase.utility.DynamoDBUtils;
 import com.tbd.androidshowcase.utility.ITableObject;
 import com.tbd.androidshowcase.utility.NoSQLTableBase;
-import com.tbd.androidshowcase.utility.NotesAdapter;
-import com.tbd.androidshowcase.utility.NotesDO;
 import com.tbd.androidshowcase.utility.Product;
 import com.tbd.androidshowcase.utility.ProductsAdapter;
 import com.tbd.androidshowcase.utility.TableFactory;
@@ -50,14 +36,10 @@ import com.tbd.androidshowcase.utility.ThreadUtils;
 import com.tbd.androidshowcase.view.IExampleListView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.RunnableFuture;
 
 public class ExampleListActivity extends AppCompatActivity implements IExampleListView {
 
