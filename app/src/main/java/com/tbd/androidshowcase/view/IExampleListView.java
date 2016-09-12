@@ -1,6 +1,6 @@
 package com.tbd.androidshowcase.view;
 
-import com.tbd.androidshowcase.utility.Product;
+import com.tbd.androidshowcase.model.Product;
 
 /**
  * Created by Trevor on 9/4/2016.

@@ -1,7 +1,8 @@
-package com.tbd.androidshowcase.utility;
+package com.tbd.androidshowcase.tables;
+
+import com.tbd.androidshowcase.tables.ITableObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Trevor on 9/11/2016.

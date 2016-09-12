@@ -1,4 +1,4 @@
-package com.tbd.androidshowcase.utility;
+package com.tbd.androidshowcase.tables;
 
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBTable;
 

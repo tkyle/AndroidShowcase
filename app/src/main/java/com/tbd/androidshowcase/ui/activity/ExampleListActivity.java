@@ -27,11 +27,11 @@ import com.tbd.androidshowcase.R;
 import com.tbd.androidshowcase.presenter.ExampleListPresenter;
 import com.tbd.androidshowcase.user.IdentityManager;
 import com.tbd.androidshowcase.utility.AWSMobileClient;
-import com.tbd.androidshowcase.utility.ITableObject;
-import com.tbd.androidshowcase.utility.NoSQLTableBase;
-import com.tbd.androidshowcase.utility.Product;
-import com.tbd.androidshowcase.utility.ProductsAdapter;
-import com.tbd.androidshowcase.utility.TableFactory;
+import com.tbd.androidshowcase.tables.ITableObject;
+import com.tbd.androidshowcase.tables.NoSQLTableBase;
+import com.tbd.androidshowcase.model.Product;
+import com.tbd.androidshowcase.ui.adapters.ProductsAdapter;
+import com.tbd.androidshowcase.tables.TableFactory;
 import com.tbd.androidshowcase.utility.ThreadUtils;
 import com.tbd.androidshowcase.view.IExampleListView;
 

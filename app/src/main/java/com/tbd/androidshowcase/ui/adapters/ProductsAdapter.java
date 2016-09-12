@@ -1,4 +1,4 @@
-package com.tbd.androidshowcase.utility;
+package com.tbd.androidshowcase.ui.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.tbd.androidshowcase.R;
+import com.tbd.androidshowcase.model.Product;
 
 import java.util.ArrayList;
 
