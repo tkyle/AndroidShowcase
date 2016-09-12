@@ -5,7 +5,7 @@ import com.tbd.androidshowcase.model.Product;
 /**
  * Created by Trevor on 9/4/2016.
  */
-public interface IExampleListView
+public interface IProductListView
 {
     void GetUserId();
     //void AddSampleItems();

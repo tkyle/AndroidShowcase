@@ -16,7 +16,7 @@
         android:gravity="center"
         android:textAlignment="center"
         android:text="List Example"
-        android:onClick="onExampleListEventClicked"/>
+        android:onClick="onProductListActivityClicked"/>
 
     <Button
         android:id="@+id/moveCircleButton"

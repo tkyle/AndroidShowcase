@@ -5,7 +5,7 @@ package com.tbd.androidshowcase.view;
  */
 public interface IMainView
 {
-    void openExampleListActivity();
+    void openProductListActivity();
     void openMoveCircleActivity();
     void openRotationActivity();
 }

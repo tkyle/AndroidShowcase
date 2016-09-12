@@ -14,9 +14,9 @@ public class MainPresenter
         this.view = view;
     }
 
-    public void onExampleListActivityClicked()
+    public void onProductListActivityClicked()
     {
-        view.openExampleListActivity();
+        view.openProductListActivity();
     }
 
     public void onMoveCircleActivityClicked()

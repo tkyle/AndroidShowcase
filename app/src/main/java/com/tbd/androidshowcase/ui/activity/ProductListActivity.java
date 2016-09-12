@@ -24,7 +24,7 @@ import android.widget.TextView;
 
 import com.amazonaws.AmazonClientException;
 import com.tbd.androidshowcase.R;
-import com.tbd.androidshowcase.presenter.ExampleListPresenter;
+import com.tbd.androidshowcase.presenter.ProductListPresenter;
 import com.tbd.androidshowcase.user.IdentityManager;
 import com.tbd.androidshowcase.utility.AWSMobileClient;
 import com.tbd.androidshowcase.tables.ITableObject;
@@ -33,7 +33,7 @@ import com.tbd.androidshowcase.model.Product;
 import com.tbd.androidshowcase.ui.adapters.ProductsAdapter;
 import com.tbd.androidshowcase.tables.TableFactory;
 import com.tbd.androidshowcase.utility.ThreadUtils;
-import com.tbd.androidshowcase.view.IExampleListView;
+import com.tbd.androidshowcase.view.IProductListView;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -41,14 +41,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-public class ExampleListActivity extends AppCompatActivity implements IExampleListView {
+public class ProductListActivity extends AppCompatActivity implements IProductListView {
 
     public static final String BUNDLE_ARGS_TABLE_TITLE = "tableTitle";
 
-    private ExampleListPresenter presenter;
-    ArrayAdapter<String> listAdapter;
+    private ProductListPresenter presenter;
     ListView exampleListView;
-    ArrayList<String> exampleList;
 
     ArrayList<? extends ITableObject> items;
 
@@ -64,29 +62,16 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
-        presenter = new ExampleListPresenter(ExampleListActivity.this);
-
-        exampleList = presenter.GetExampleList();
-        listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, exampleList);
+        presenter = new ProductListPresenter(ProductListActivity.this);
 
         productsAdapter = new ProductsAdapter(this, new ArrayList<Product>());
 
         exampleListView = (ListView) findViewById( R.id.exampleListView );
         exampleListView.setAdapter(productsAdapter);
 
-        //listAdapter = new ArrayAdapter<String>(this, R.layout.examplelist_row, presenter.GetExampleList());
-
-        //presenter.onGetItemsClicked();
-        // Set the ArrayAdapter as the ListView's adapter.
-
-        //exampleListView.setAdapter( listAdapter );
         registerForContextMenu(exampleListView);
 
-        //final Bundle args = getArguments();
-
-        //final String tableName = "Notes";//args.getString(BUNDLE_ARGS_TABLE_TITLE);
         final String tableName = "Products";//args.getString(BUNDLE_ARGS_TABLE_TITLE);
-        //demoTable = DemoNoSQLTableFactory.instance(getApplicationContext()).getNoSQLTableByTableName(tableName);
         demoTable = TableFactory.instance(getApplicationContext()).getNoSQLTableByTableName(tableName);
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.custom_toolbar);
@@ -97,9 +82,6 @@ public class ExampleListActivity extends AppCompatActivity implements IExampleLi
     }
 
     public void onGetUserIdClicked(View button){ presenter.onGetUserIdClicked();}
-
-    public void onAddSampleItemsClicked(View button){ presenter.onAddSampleItemsClicked();}
-    public void onRemoveSampleItemsClicked(View button){ presenter.onRemoveSampleItemsClicked();}
 
     public void onNewItemClicked(View button){ fireCustomDialog(null); }
     //public void onRemoveItemClicked(View button){ presenter.onRemoveItemClicked();}

@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements IMainView
 
     // region MainPresenter Methods
 
-    public void onExampleListEventClicked(View button){ presenter.onExampleListActivityClicked();}
+    public void onProductListActivityClicked(View button){ presenter.onProductListActivityClicked();}
     public void onMoveCircleActivityClicked(View button) { presenter.onMoveCircleActivityClicked(); }
     public void onRotationActivityClicked(View button)
     {
@@ -48,9 +48,9 @@ public class MainActivity extends AppCompatActivity implements IMainView
     // region IMainView Implementation
 
     @Override
-    public void openExampleListActivity()
+    public void openProductListActivity()
     {
-        Intent intent = new Intent(this, ExampleListActivity.class);
+        Intent intent = new Intent(this, ProductListActivity.class);
         startActivity(intent);
     }
 
