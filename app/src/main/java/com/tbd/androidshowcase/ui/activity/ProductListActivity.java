@@ -53,8 +53,7 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
 
     private IdentityManager identityManager;
 
-    //private DemoNoSQLTableBase demoTable;
-    private NoSQLTableBase demoTable;
+    private NoSQLTableBase productTable;
 
     ProductsAdapter productsAdapter;
 
@@ -84,7 +83,7 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
         registerForContextMenu(exampleListView);
 
         final String tableName = "Products";//args.getString(BUNDLE_ARGS_TABLE_TITLE);
-        demoTable = TableFactory.instance(getApplicationContext()).getNoSQLTableByTableName(tableName);
+        productTable = TableFactory.instance(getApplicationContext()).getNoSQLTableByTableName(tableName);
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.custom_toolbar);
         setSupportActionBar(myToolbar);
@@ -94,13 +93,6 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
         GetItems();
 
     }
-
-    public void onGetUserIdClicked(View button){ presenter.onGetUserIdClicked();}
-
-    public void onNewItemClicked(View button){ fireCustomDialog(null); }
-    //public void onRemoveItemClicked(View button){ presenter.onRemoveItemClicked();}
-    //public void onEditItemClicked(View button){ presenter.onEditItemClicked();}
-    public void onGetItemsClicked(View button){ presenter.onGetItemsClicked();}
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
@@ -140,41 +132,51 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_custom);
         TextView titleView = (TextView) dialog.findViewById(R.id.custom_title);
-        final EditText editCustom = (EditText) dialog.findViewById(R.id.custom_edit_note);
+
+        final EditText editProductName = (EditText) dialog.findViewById(R.id.productName);
+        final EditText editProductDescription = (EditText) dialog.findViewById(R.id.productDescription);
+        final EditText editProductCost = (EditText) dialog.findViewById(R.id.productCost);
+
+
         Button commitButton = (Button) dialog.findViewById(R.id.custom_button_commit);
         LinearLayout rootLayout = (LinearLayout) dialog.findViewById(R.id.custom_root_layout);
         final boolean isEditOperation = (product != null);
         //this is for an edit
         if (isEditOperation) {
             titleView.setText("Edit Product");
-            editCustom.setText(product.getName());
+
+            editProductName.setText(product.getName());
+            editProductDescription.setText(product.getDescription());
+            editProductCost.setText(product.getCost().toString());
+
             rootLayout.setBackgroundColor(getResources().getColor(R.color.blue));
         }
         commitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String nameText = editCustom.getText().toString();
+
+                String productNameText = editProductName.getText().toString();
+                String productDescriptionText = editProductDescription.getText().toString();
+                String productCostText = editProductCost.getText().toString();
+
                 if (isEditOperation) {
+
                     Product productEdited = new Product();
                     productEdited.setProductId(product.getProductId());
-                    productEdited.setName(nameText);
-                    productEdited.setDescription(product.getDescription());
+                    productEdited.setName(productNameText);
+                    productEdited.setDescription(productDescriptionText);
+                    productEdited.setCost(Double.parseDouble(productCostText));
 
-                    //mDbAdapter.updateReminder(reminderEdited);
                     EditItem(productEdited);
-                    //this is for new reminder
+
                 } else {
-                    //mDbAdapter.createReminder(reminderText, checkBox.isChecked());
-   /*                 NotesDO newNote = new NotesDO();
-                    newNote.setContent(editCustom.getText().toString());
-                    newNote.setNoteId(java.util.UUID.randomUUID().toString());
-                    newNote.setTitle("NEW TITLE");*/
 
                     Product newProduct = new Product();
-                    newProduct.setName(editCustom.getText().toString());
+
                     newProduct.setProductId(java.util.UUID.randomUUID().toString());
-                    newProduct.setDescription("NEW Desc");
-                    newProduct.setCost(100.00);
+                    newProduct.setName(productNameText);
+                    newProduct.setDescription(productDescriptionText);
+                    newProduct.setCost(Double.parseDouble(productCostText));
 
                     AddNewItem(newProduct);
                 }
@@ -182,7 +184,6 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
                 // Refresh item list
                 productsAdapter.clear();
                 GetItems();
-                //mCursorAdapter.changeCursor(mDbAdapter.fetchAllReminders());
                 dialog.dismiss();
             }
         });
@@ -203,16 +204,13 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
     public void AddNewItem(final Product product)
     {
         // Obtain a reference to the identity manager.
-        //AWSMobileClient.initializeMobileClientIfNecessary(this);
-
-        // Obtain a reference to the identity manager.
         AWSMobileClient.initializeMobileClientIfNecessary(this);
 
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    demoTable.addNewItem(product);
+                    productTable.addNewItem(product);
                 } catch (final AmazonClientException ex) {
                     // The insertSampleData call already logs the error, so we only need to
                     // show the error dialog to the user at this point.
@@ -251,7 +249,7 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
             @Override
             public void run() {
                 try {
-                    demoTable.removeItem(productId);
+                    productTable.removeItem(productId);
                 } catch (final AmazonClientException ex) {
                     // The insertSampleData call already logs the error, so we only need to
                     // show the error dialog to the user at this point.
@@ -271,17 +269,15 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
     public void EditItem(final Product product)
     {
         // Obtain a reference to the identity manager.
-        //AWSMobileClient.initializeMobileClientIfNecessary(this);
-
-        // Obtain a reference to the identity manager.
         AWSMobileClient.initializeMobileClientIfNecessary(this);
 
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    demoTable.editItem(product);
+                    productTable.editItem(product);
                 } catch (final AmazonClientException ex) {
+
                     // The insertSampleData call already logs the error, so we only need to
                     // show the error dialog to the user at this point.
                     createAndShowDialog(getString(R.string.nosql_dialog_title_failed_operation_text), ex.getMessage());
@@ -313,7 +309,7 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
             @Override
             public ArrayList<ITableObject> call() throws Exception {
 
-            return (ArrayList<ITableObject>)demoTable.getItems();
+            return (ArrayList<ITableObject>)productTable.getItems();
         };
 
         };

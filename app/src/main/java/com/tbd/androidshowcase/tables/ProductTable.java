@@ -126,6 +126,7 @@ public class ProductTable extends NoSQLTableBase
 
             item.setName(product.getName());
             item.setDescription(product.getDescription());
+            item.setCost(product.getCost());
             // Demonstrate editing a single item.
             try {
                 mapper.save(item);

@@ -11,18 +11,39 @@
         android:layout_height="60dp"
         android:gravity="center_vertical"
         android:padding="10dp"
-        android:text="New Note:"
+        android:text="New Product"
         android:textColor="@color/white"
         android:textSize="24sp" />
     <EditText
-        android:id="@+id/custom_edit_note"
+        android:id="@+id/productName"
         android:layout_width="fill_parent"
-        android:layout_height="100dp"
+        android:layout_height="25dp"
         android:layout_margin="4dp"
         android:background="@color/light_grey"
         android:gravity="start"
+        android:hint="Name"
         android:textColor="@color/black">
         <requestFocus />
+    </EditText>
+    <EditText
+        android:id="@+id/productDescription"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_margin="4dp"
+        android:background="@color/light_grey"
+        android:gravity="start"
+        android:hint="Description"
+        android:textColor="@color/black">
+    </EditText>
+    <EditText
+        android:id="@+id/productCost"
+        android:layout_width="fill_parent"
+        android:layout_height="25dp"
+        android:layout_margin="4dp"
+        android:background="@color/light_grey"
+        android:gravity="start"
+        android:hint="Cost"
+        android:textColor="@color/black">
     </EditText>
     <LinearLayout
         android:layout_width="fill_parent"
