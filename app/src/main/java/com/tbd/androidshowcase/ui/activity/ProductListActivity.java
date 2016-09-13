@@ -1,9 +1,12 @@
 package com.tbd.androidshowcase.ui.activity;
 
 import android.app.Dialog;
+import android.app.FragmentTransaction;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatDialogFragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +17,7 @@ import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -26,6 +30,7 @@ import android.widget.TextView;
 import com.amazonaws.AmazonClientException;
 import com.tbd.androidshowcase.R;
 import com.tbd.androidshowcase.presenter.ProductListPresenter;
+import com.tbd.androidshowcase.ui.fragment.ProductFragment;
 import com.tbd.androidshowcase.user.IdentityManager;
 import com.tbd.androidshowcase.utility.AWSMobileClient;
 import com.tbd.androidshowcase.tables.ITableObject;
@@ -75,9 +80,14 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
         // declared in XML. May be able to fix this by updating the design library.
         // This is working for now.
         newButton = (FloatingActionButton)findViewById(R.id.newButton);
+//        newButton.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                fireCustomDialog(null);
+//            }});
+
         newButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                fireCustomDialog(null);
+                showDialog();
             }});
 
         registerForContextMenu(exampleListView);
@@ -92,6 +102,31 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
 
         GetItems();
 
+    }
+
+    public void showDialog()
+    {
+        // Need this in v7
+        //ProductFragment productFragment = new ProductFragment();
+        //productFragment.show(getSupportFragmentManager(), "dialog");
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        ProductFragment newFragment = new ProductFragment();
+
+        //if (mIsLargeLayout) {
+            // The device is using a large layout, so show the fragment as a dialog
+           // newFragment.show(fragmentManager, "dialog");
+        //} else {
+            // The device is smaller, so show the fragment fullscreen
+            android.support.v4.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
+            // For a little polish, specify a transition animation
+            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+
+            View blah = findViewById(android.R.id.content);
+            // To make it fullscreen, use the 'content' root view as the container
+            // for the fragment, which is always the root view for the activity
+            transaction.add(android.R.id.content, newFragment).addToBackStack(null).commit();
+       // }
     }
 
     @Override
@@ -131,7 +166,7 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_custom);
-        TextView titleView = (TextView) dialog.findViewById(R.id.custom_title);
+        //TextView titleView = (TextView) dialog.findViewById(R.id.custom_title);
 
         final EditText editProductName = (EditText) dialog.findViewById(R.id.productName);
         final EditText editProductDescription = (EditText) dialog.findViewById(R.id.productDescription);
@@ -143,7 +178,7 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
         final boolean isEditOperation = (product != null);
         //this is for an edit
         if (isEditOperation) {
-            titleView.setText("Edit Product");
+//            titleView.setText("Edit Product");
 
             editProductName.setText(product.getName());
             editProductDescription.setText(product.getDescription());

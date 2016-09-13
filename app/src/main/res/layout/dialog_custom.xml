@@ -1,19 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:id="@+id/custom_root_layout"
-              android:layout_width="300dp"
-              android:layout_height="fill_parent"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
               android:background="@color/green"
               android:orientation="vertical">
-    <TextView
-        android:id="@+id/custom_title"
-        android:layout_width="fill_parent"
-        android:layout_height="60dp"
-        android:gravity="center_vertical"
-        android:padding="10dp"
-        android:text="New Product"
-        android:textColor="@color/white"
-        android:textSize="24sp" />
     <EditText
         android:id="@+id/productName"
         android:layout_width="fill_parent"
