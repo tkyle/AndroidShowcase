@@ -18,6 +18,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.tbd.androidshowcase.R;
 
@@ -26,7 +27,7 @@ import com.tbd.androidshowcase.R;
  */
 public class ProductFragment extends android.support.v4.app.DialogFragment
 {
-    private Button btnCancel;
+    private ImageButton btnDismiss;
 
     public static ProductFragment newInstance(String title) {
         ProductFragment frag = new ProductFragment();
@@ -56,15 +57,15 @@ public class ProductFragment extends android.support.v4.app.DialogFragment
         view.setMinimumWidth((int)(displayRectangle.width() * 0.7f));
         //view.setMinimumHeight((int)(displayRectangle.height() * 0.9f));
         //mEditText = (EditText) view.findViewById(R.id.txt_your_name);
-       /* btnCancel = (Button) view.findViewById(R.id.custom_button_cancel);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
+        btnDismiss = (ImageButton) view.findViewById(R.id.btnDismiss);
+        btnDismiss.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ProductFragmentListener listener = (ProductFragmentListener) getActivity();
+                //ProductFragmentListener listener = (ProductFragmentListener) getActivity();
                 //listener.onFinishEditDialog(mEditText.getText().toString());
                 dismiss();
             }
-        });*/
+        });
         String title = getArguments().getString("title", "New Product");
         getDialog().setTitle(title);
         // Show soft keyboard automatically
