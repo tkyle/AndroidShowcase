@@ -26,6 +26,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amazonaws.AmazonClientException;
 import com.tbd.androidshowcase.R;
@@ -47,7 +48,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-public class ProductListActivity extends AppCompatActivity implements IProductListView {
+public class ProductListActivity extends AppCompatActivity implements IProductListView, ProductFragment.ProductFragmentListener {
 
     public static final String BUNDLE_ARGS_TABLE_TITLE = "tableTitle";
 
@@ -136,6 +137,11 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
             default:
                 return super.onContextItemSelected(item);
         }
+    }
+
+    @Override
+    public void onFinishEditDialog(String inputText) {
+        Toast.makeText(this, "Your product is: " + inputText, Toast.LENGTH_SHORT).show();
     }
 
     // Begin Custom Dialog Code

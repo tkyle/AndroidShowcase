@@ -28,6 +28,11 @@ import com.tbd.androidshowcase.R;
 public class ProductFragment extends android.support.v4.app.DialogFragment
 {
     private ImageButton btnDismiss;
+    private Button btnSubmit;
+
+    private EditText productName;
+    private EditText productDescription;
+    private EditText productCost;
 
     public static ProductFragment newInstance(String title) {
         ProductFragment frag = new ProductFragment();
@@ -55,14 +60,25 @@ public class ProductFragment extends android.support.v4.app.DialogFragment
         window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         view.setMinimumWidth((int)(displayRectangle.width() * 0.7f));
-        //view.setMinimumHeight((int)(displayRectangle.height() * 0.9f));
-        //mEditText = (EditText) view.findViewById(R.id.txt_your_name);
+
+        productName =  (EditText) view.findViewById(R.id.txtProductName);
+        productDescription =  (EditText) view.findViewById(R.id.txtProductDescription);
+        productCost =  (EditText) view.findViewById(R.id.txtProductCost);
+
         btnDismiss = (ImageButton) view.findViewById(R.id.btnDismiss);
         btnDismiss.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //ProductFragmentListener listener = (ProductFragmentListener) getActivity();
-                //listener.onFinishEditDialog(mEditText.getText().toString());
+                dismiss();
+            }
+        });
+
+        btnSubmit = (Button) view.findViewById(R.id.btnSubmit);
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ProductFragmentListener listener = (ProductFragmentListener) getActivity();
+                listener.onFinishEditDialog(productName.getText().toString());
                 dismiss();
             }
         });
@@ -70,7 +86,7 @@ public class ProductFragment extends android.support.v4.app.DialogFragment
         getDialog().setTitle(title);
         // Show soft keyboard automatically
         //mEditText.requestFocus();
-        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        //getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         return view;
     }
 
