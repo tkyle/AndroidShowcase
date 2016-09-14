@@ -7,10 +7,6 @@ import com.tbd.androidshowcase.model.Product;
  */
 public interface IProductListView
 {
-    void GetUserId();
-    //void AddSampleItems();
-    //void RemoveSampleItems();
-
     void AddNewItem(Product product);
     void RemoveItem(String productId);
     void EditItem(Product product);

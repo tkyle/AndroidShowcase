@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.tbd.androidshowcase.R;
+import com.tbd.androidshowcase.model.Product;
 
 /**
  * Created by Trevor on 9/13/2016.
@@ -34,16 +35,31 @@ public class ProductFragment extends android.support.v4.app.DialogFragment
     private EditText productDescription;
     private EditText productCost;
 
-    public static ProductFragment newInstance(String title) {
+    private Boolean isNew;
+
+    private Product product;
+
+    public static ProductFragment newInstance(String title, Product _product,  Boolean isNew) {
+
         ProductFragment frag = new ProductFragment();
+
         Bundle args = new Bundle();
+
+        args.putString("productId", _product.getProductId());
+        args.putString("productName", _product.getName());
+        args.putString("productDescription", _product.getDescription());
+        args.putString("productCost", _product.getCost() != null ? _product.getCost().toString() : "0.00");
+
         args.putString("title", title);
+
+        args.putBoolean("isNew", isNew);
+
         frag.setArguments(args);
         return frag;
     }
 
     public interface ProductFragmentListener {
-        void onFinishEditDialog(String inputText);
+        void onFinishEditDialog(Product product, Boolean isNew);
     }
 
     public ProductFragment() {
@@ -78,12 +94,34 @@ public class ProductFragment extends android.support.v4.app.DialogFragment
             @Override
             public void onClick(View v) {
                 ProductFragmentListener listener = (ProductFragmentListener) getActivity();
-                listener.onFinishEditDialog(productName.getText().toString());
+
+                product.setName(productName.getText().toString());
+                product.setDescription( productDescription.getText().toString());
+                product.setCost(Double.parseDouble(productCost.getText().toString()));
+
+                listener.onFinishEditDialog(product, isNew);
                 dismiss();
             }
         });
-        String title = getArguments().getString("title", "New Product");
+
+        String title = getArguments().getString("title");
         getDialog().setTitle(title);
+
+        isNew = getArguments().getBoolean("isNew");
+
+        product = new Product();
+        product.setProductId(getArguments().getString("productId"));
+        product.setName(getArguments().getString("productName"));
+        product.setDescription(getArguments().getString("productDescription"));
+        product.setCost(getArguments().getString("productCost") != null ? Double.parseDouble(getArguments().getString("productCost")) : 0.00);
+
+        if(!isNew)
+        {
+            productName.setText(product.getName());
+            productDescription.setText(product.getDescription());
+            productCost.setText(product.getCost().toString());
+        }
+
         // Show soft keyboard automatically
         //mEditText.requestFocus();
         //getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);

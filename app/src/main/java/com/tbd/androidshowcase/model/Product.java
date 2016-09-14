@@ -20,6 +20,16 @@ public class Product implements ITableObject
     private String _description;
     private Double _cost;
 
+    public Product()
+    {
+
+    }
+
+    public Product(String productId)
+    {
+        setProductId(productId);
+    }
+
     @DynamoDBHashKey(attributeName = "UserId")
     @DynamoDBIndexHashKey(attributeName = "UserId", globalSecondaryIndexName = "DateSorted")
     public String getUserId() {

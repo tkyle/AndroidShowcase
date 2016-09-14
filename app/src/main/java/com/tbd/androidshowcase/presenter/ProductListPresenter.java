@@ -11,14 +11,4 @@ public class ProductListPresenter
 
     public ProductListPresenter(IProductListView view) { this.view = view; }
 
-    public void onGetItemsClicked()
-    {
-        view.GetItems();
-    }
-
-    public void onGetUserIdClicked()
-    {
-        view.GetUserId();
-    }
-
 }
