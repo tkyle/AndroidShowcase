@@ -38,6 +38,7 @@ public class MoveCircleActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
+        ab.setTitle("Move Circle");
     }
 
     public class MyView extends View

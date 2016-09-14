@@ -95,6 +95,7 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
         setSupportActionBar(myToolbar);
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
+        ab.setTitle("Product List");
 
         GetItems();
     }
