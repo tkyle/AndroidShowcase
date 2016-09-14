@@ -10,23 +10,42 @@
         android:layout_width="match_parent"
         android:layout_height="48dp">
 
-        <View
-            class="android.view.View"
-            android:layout_width="10dp"
-            android:layout_height="match_parent"
-            android:background="@color/green"
-            android:id="@+id/row_tab" />
-
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Note Text"
+            android:text="Product Name"
             android:gravity="center_vertical"
             android:ellipsize="end"
             android:maxLines="1"
             android:padding="10dp"
-            android:id="@+id/noteText"
+            android:id="@+id/lstProductName"
+            android:textSize="18sp"
+            android:textColor="@color/white"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Product Description"
+            android:gravity="center_vertical"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:padding="10dp"
+            android:id="@+id/lstProductDescription"
+            android:textSize="12sp"
+            android:textColor="@color/white"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="0.00"
+            android:gravity="center_vertical"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:padding="10dp"
+            android:id="@+id/lstProductCost"
             android:textSize="18sp"
             android:textColor="@color/white"/>
 

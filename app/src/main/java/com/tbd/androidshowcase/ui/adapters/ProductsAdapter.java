@@ -17,8 +17,8 @@ import java.util.ArrayList;
  */
 public class ProductsAdapter  extends ArrayAdapter<Product> {
 
-    public ProductsAdapter(Context context, ArrayList<Product> notes) {
-        super(context, 0, notes);
+    public ProductsAdapter(Context context, ArrayList<Product> products) {
+        super(context, 0, products);
     }
 
     @Override
@@ -26,16 +26,21 @@ public class ProductsAdapter  extends ArrayAdapter<Product> {
     {
         // Get the data item for this position
         Product product = getItem(position);
+
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null)
         {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.examplelist_row, parent, false);
         }
         // Lookup view for data population
-        TextView noteText = (TextView) convertView.findViewById(R.id.noteText);
+        TextView productNameText = (TextView) convertView.findViewById(R.id.lstProductName);
+        TextView productDescriptionText = (TextView) convertView.findViewById(R.id.lstProductDescription);
+        TextView productCostText = (TextView) convertView.findViewById(R.id.lstProductCost);
 
         // Populate the data into the template view using the data object
-        noteText.setText(product.getName());
+        productNameText.setText(product.getName());
+        productDescriptionText.setText(product.getDescription());
+        productCostText.setText(product.getCost().toString());
 
         // Return the completed view to render on screen
         return convertView;
