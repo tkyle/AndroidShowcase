@@ -1,60 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/custom_root_layout"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/green"
-              android:orientation="vertical">
-    <EditText
-        android:id="@+id/productName"
-        android:layout_width="fill_parent"
-        android:layout_height="25dp"
-        android:layout_margin="4dp"
-        android:background="@color/light_grey"
-        android:gravity="start"
-        android:hint="Name"
-        android:textColor="@color/black">
-        <requestFocus />
-    </EditText>
-    <EditText
-        android:id="@+id/productDescription"
-        android:layout_width="fill_parent"
-        android:layout_height="50dp"
-        android:layout_margin="4dp"
-        android:background="@color/light_grey"
-        android:gravity="start"
-        android:hint="Description"
-        android:textColor="@color/black">
-    </EditText>
-    <EditText
-        android:id="@+id/productCost"
-        android:layout_width="fill_parent"
-        android:layout_height="25dp"
-        android:layout_margin="4dp"
-        android:background="@color/light_grey"
-        android:gravity="start"
-        android:hint="Cost"
-        android:textColor="@color/black">
-    </EditText>
+              android:id="@+id/edit_name"
+              android:layout_width="match_parent" android:layout_height="wrap_content"
+              android:layout_gravity="center" android:orientation="vertical"  >
+
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="horizontal">
-        <Button
-            android:id="@+id/custom_button_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/light_grey"
+        android:elevation="4dp">
+
+        <ImageButton
+            android:id="@+id/btnDismiss"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:background="@android:color/transparent"
+            android:src="@mipmap/ic_close_black_24dp"/>
+
+        <View
             android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_weight="50"
-            android:text="Cancel"
-            android:textColor="@color/white"
-            />
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
         <Button
-            android:id="@+id/custom_button_commit"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_weight="50"
-            android:text="Commit"
-            android:textColor="@color/white"
-            />
+            android:id="@+id/btnSubmit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:text="Save" />
+
     </LinearLayout>
+    <TextView
+        android:textSize="18sp"
+        android:id="@+id/lblProductName" android:text="Name"
+        android:layout_width="wrap_content" android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/txtProductName"
+        android:layout_width="match_parent"  android:layout_height="wrap_content"
+        android:inputType="text"
+        android:imeOptions="actionDone" />
+
+    <TextView
+        android:textSize="18sp"
+        android:id="@+id/lblProductDescription" android:text="Description"
+        android:layout_width="wrap_content" android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/txtProductDescription"
+        android:layout_width="match_parent"  android:layout_height="wrap_content"
+        android:inputType="text"
+        android:imeOptions="actionDone" />
+
+    <TextView
+        android:textSize="18sp"
+        android:id="@+id/lblProductCost" android:text="Cost"
+        android:layout_width="wrap_content" android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/txtProductCost"
+        android:layout_width="match_parent"  android:layout_height="wrap_content"
+        android:inputType="text"
+        android:imeOptions="actionDone" />
+
 </LinearLayout>

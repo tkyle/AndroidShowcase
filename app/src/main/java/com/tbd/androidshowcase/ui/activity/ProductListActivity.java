@@ -106,27 +106,9 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
 
     public void showDialog()
     {
-        // Need this in v7
-        //ProductFragment productFragment = new ProductFragment();
-        //productFragment.show(getSupportFragmentManager(), "dialog");
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        ProductFragment newFragment = new ProductFragment();
-
-        //if (mIsLargeLayout) {
-            // The device is using a large layout, so show the fragment as a dialog
-           // newFragment.show(fragmentManager, "dialog");
-        //} else {
-            // The device is smaller, so show the fragment fullscreen
-            android.support.v4.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
-            // For a little polish, specify a transition animation
-            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-
-            View blah = findViewById(android.R.id.content);
-            // To make it fullscreen, use the 'content' root view as the container
-            // for the fragment, which is always the root view for the activity
-            transaction.add(android.R.id.content, newFragment).addToBackStack(null).commit();
-       // }
+        FragmentManager fm = getSupportFragmentManager();
+        ProductFragment productDialog = ProductFragment.newInstance("Type your name");
+        productDialog.show(fm, "fragment_edit_name");
     }
 
     @Override
@@ -168,13 +150,13 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
         dialog.setContentView(R.layout.dialog_custom);
         //TextView titleView = (TextView) dialog.findViewById(R.id.custom_title);
 
-        final EditText editProductName = (EditText) dialog.findViewById(R.id.productName);
-        final EditText editProductDescription = (EditText) dialog.findViewById(R.id.productDescription);
-        final EditText editProductCost = (EditText) dialog.findViewById(R.id.productCost);
+        final EditText editProductName = (EditText) dialog.findViewById(R.id.txtProductName);
+        final EditText editProductDescription = (EditText) dialog.findViewById(R.id.txtProductDescription);
+        final EditText editProductCost = (EditText) dialog.findViewById(R.id.txtProductCost);
 
 
-        Button commitButton = (Button) dialog.findViewById(R.id.custom_button_commit);
-        LinearLayout rootLayout = (LinearLayout) dialog.findViewById(R.id.custom_root_layout);
+        Button commitButton = (Button) dialog.findViewById(R.id.btnSubmit);
+        //LinearLayout rootLayout = (LinearLayout) dialog.findViewById(R.id.custom_root_layout);
         final boolean isEditOperation = (product != null);
         //this is for an edit
         if (isEditOperation) {
@@ -184,7 +166,7 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
             editProductDescription.setText(product.getDescription());
             editProductCost.setText(product.getCost().toString());
 
-            rootLayout.setBackgroundColor(getResources().getColor(R.color.blue));
+            //rootLayout.setBackgroundColor(getResources().getColor(R.color.blue));
         }
         commitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -223,13 +205,13 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
             }
         });
 
-        Button buttonCancel = (Button) dialog.findViewById(R.id.custom_button_cancel);
+      /*  Button buttonCancel = (Button) dialog.findViewById(R.id.custom_button_cancel);
         buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
             }
-        });
+        });*/
         dialog.show();
     }
 

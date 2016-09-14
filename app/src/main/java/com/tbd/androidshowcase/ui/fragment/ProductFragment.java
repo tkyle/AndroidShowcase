@@ -2,14 +2,22 @@ package com.tbd.androidshowcase.ui.fragment;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDialogFragment;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.tbd.androidshowcase.R;
 
@@ -18,39 +26,51 @@ import com.tbd.androidshowcase.R;
  */
 public class ProductFragment extends android.support.v4.app.DialogFragment
 {
-    Button cancelButton;
+    private Button btnCancel;
+
+    public static ProductFragment newInstance(String title) {
+        ProductFragment frag = new ProductFragment();
+        Bundle args = new Bundle();
+        args.putString("title", title);
+        frag.setArguments(args);
+        return frag;
+    }
+
+    public interface ProductFragmentListener {
+        void onFinishEditDialog(String inputText);
+    }
+
+    public ProductFragment() {
+        // Empty constructor required for DialogFragment
+    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
-        View view = inflater.inflate(R.layout.dialog_custom,container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.dialog_custom, container);
 
-        cancelButton = (Button) view.findViewById( R.id.custom_button_cancel);
+        // retrieve display dimensions
+        Rect displayRectangle = new Rect();
+        Window window = getActivity().getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-        public void onClick(View v) {
-            dismissDialog();
-        }});
-
-        //int title = getArguments().getInt("title");
-        //getDialog().setTitle("New Product");
+        view.setMinimumWidth((int)(displayRectangle.width() * 0.7f));
+        //view.setMinimumHeight((int)(displayRectangle.height() * 0.9f));
+        //mEditText = (EditText) view.findViewById(R.id.txt_your_name);
+       /* btnCancel = (Button) view.findViewById(R.id.custom_button_cancel);
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ProductFragmentListener listener = (ProductFragmentListener) getActivity();
+                //listener.onFinishEditDialog(mEditText.getText().toString());
+                dismiss();
+            }
+        });*/
+        String title = getArguments().getString("title", "New Product");
+        getDialog().setTitle(title);
+        // Show soft keyboard automatically
+        //mEditText.requestFocus();
+        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         return view;
     }
 
-    public void dismissDialog()
-    {
-        this.dismiss();
-    }
-
-    /** The system calls this only when creating the layout in a dialog. */
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        // The only reason you might override this method when using onCreateView() is
-        // to modify any dialog characteristics. For example, the dialog includes a
-        // title by default, but your custom layout might not need it. So here you can
-        // remove the dialog title, but you must call the superclass to get the Dialog.
-        Dialog dialog = super.onCreateDialog(savedInstanceState);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        return dialog;
-    }
 }
