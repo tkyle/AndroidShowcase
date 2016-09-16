@@ -4,7 +4,9 @@ import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.support.v7.app.ActionBar;
@@ -52,6 +54,8 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
 
     public static final String BUNDLE_ARGS_TABLE_TITLE = "tableTitle";
 
+    private CoordinatorLayout coordinatorLayout;
+
     private ProductListPresenter presenter;
     ListView exampleListView;
 
@@ -69,6 +73,8 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
 
         presenter = new ProductListPresenter(ProductListActivity.this);
 
@@ -160,11 +166,14 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
                     createAndShowDialog(getString(R.string.nosql_dialog_title_failed_operation_text), ex.getMessage());
                     return;
                 }
-                ThreadUtils.runOnUiThread(new Runnable() {
+/*                ThreadUtils.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         createAndShowDialog(getString(R.string.nosql_dialog_message_added_sample_data_text), getString(R.string.nosql_dialog_title_added_sample_data_text)); }
-                });
+                });*/
+
+                Snackbar snackbar = Snackbar.make(coordinatorLayout, "Item added.", Snackbar.LENGTH_LONG);
+                snackbar.show();
             }
         }).start();
     }
