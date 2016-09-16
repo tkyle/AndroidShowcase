@@ -8,7 +8,7 @@ import com.tbd.androidshowcase.model.Product;
 public interface IProductListView
 {
     void AddNewItem(Product product);
-    void RemoveItem(String productId);
+    void RemoveItem(Product product);
     void EditItem(Product product);
     void GetItems();
 }

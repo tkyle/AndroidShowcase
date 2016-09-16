@@ -9,34 +9,27 @@
     tools:context=".ui.activity.ProductListActivity"
     android:id="@+id/coordinatorLayout">
 
-    <RelativeLayout
+   <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <include android:id="@+id/custom_toolbar" layout="@layout/custom_toolbar" />
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+       <include layout="@layout/custom_toolbar" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <ListView
             android:id="@+id/exampleListView"
             android:layout_width="match_parent"
             android:background="@color/white"
             android:layout_height="wrap_content"
-            tools:listitem="@layout/examplelist_row"
-            android:layout_below="@id/custom_toolbar"/>
+            tools:listitem="@layout/examplelist_row"/>
 
-<!--        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/newButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="31dp"
-            android:layout_marginRight="15dp"
-            android:gravity="center"
-            android:textAlignment="center"
-            app:backgroundTint="@color/light_grey"
-            android:src="@mipmap/ic_add_white_24dp"
-            app:elevation="4dp" />-->
-
-    </RelativeLayout>
+    </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/newButton"

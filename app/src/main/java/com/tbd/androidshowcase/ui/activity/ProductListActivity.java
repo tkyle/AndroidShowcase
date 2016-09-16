@@ -132,7 +132,7 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
                 showDialog(false, (Product)items.get(info.position));
                 return true;
             case R.id.delete:
-                RemoveItem(((Product)items.get(info.position)).getProductId());
+                RemoveItem((Product)items.get(info.position));
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -152,14 +152,27 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
     @Override
     public void AddNewItem(final Product product)
     {
-        // Obtain a reference to the identity manager.
+       // Obtain a reference to the identity manager.
         AWSMobileClient.initializeMobileClientIfNecessary(this);
 
         new Thread(new Runnable() {
             @Override
             public void run() {
+
+
+
                 try {
-                    productTable.addNewItem(product);
+                    final Product newItem = (Product)productTable.addNewItem(product);
+
+                    Snackbar snackbar = Snackbar.make(coordinatorLayout, "Item added", Snackbar.LENGTH_LONG)
+                            .setAction("UNDO", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view){
+
+                                    RemoveItem(newItem);
+                                }
+                            });
+                    snackbar.show();
                 } catch (final AmazonClientException ex) {
                     // The insertSampleData call already logs the error, so we only need to
                     // show the error dialog to the user at this point.
@@ -172,14 +185,13 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
                         createAndShowDialog(getString(R.string.nosql_dialog_message_added_sample_data_text), getString(R.string.nosql_dialog_title_added_sample_data_text)); }
                 });*/
 
-                Snackbar snackbar = Snackbar.make(coordinatorLayout, "Item added.", Snackbar.LENGTH_LONG);
-                snackbar.show();
+
             }
         }).start();
     }
 
     @Override
-    public void RemoveItem(final String productId)
+    public void RemoveItem(final Product product)
     {
         // Obtain a reference to the identity manager.
         AWSMobileClient.initializeMobileClientIfNecessary(this);
@@ -188,18 +200,24 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
             @Override
             public void run() {
                 try {
-                    productTable.removeItem(productId);
+                    productTable.removeItem(product.getProductId());
                 } catch (final AmazonClientException ex) {
                     // The insertSampleData call already logs the error, so we only need to
                     // show the error dialog to the user at this point.
                     createAndShowDialog(getString(R.string.nosql_dialog_title_failed_operation_text), ex.getMessage());
                     return;
                 }
-                ThreadUtils.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        createAndShowDialog(getString(R.string.nosql_dialog_message_added_sample_data_text), getString(R.string.nosql_dialog_title_added_sample_data_text)); }
-                });
+
+                Snackbar snackbar = Snackbar.make(coordinatorLayout, "Item Removed", Snackbar.LENGTH_LONG)
+                        .setAction("UNDO", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view){
+
+                                AddNewItem(product);
+                            }
+                        });
+                snackbar.show();
+
             }
         }).start();
     }

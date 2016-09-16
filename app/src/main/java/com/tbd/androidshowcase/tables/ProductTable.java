@@ -41,7 +41,7 @@ public class ProductTable extends NoSQLTableBase
     }
 
     @Override
-    public void addNewItem(ITableObject tableObject) throws AmazonClientException {
+    public ITableObject addNewItem(ITableObject tableObject) throws AmazonClientException {
 
         Product product = (Product)tableObject;
 
@@ -58,6 +58,7 @@ public class ProductTable extends NoSQLTableBase
 
         try {
             mapper.save(newProduct);
+            return newProduct;
         } catch (final AmazonClientException ex) {
             Log.e(LOG_TAG, "Failed saving product : " + ex.getMessage(), ex);
             throw ex;

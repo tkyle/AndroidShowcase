@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public abstract class NoSQLTableBase
 {
     public abstract String getTableName();
-    public abstract void addNewItem(ITableObject tableObject);
+    public abstract ITableObject addNewItem(ITableObject tableObject);
     public abstract void removeItem(String objectId);
     public abstract void editItem(ITableObject tableObject);
     public abstract ArrayList<ITableObject> getItems();
