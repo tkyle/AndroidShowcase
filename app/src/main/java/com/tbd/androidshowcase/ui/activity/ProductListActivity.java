@@ -8,6 +8,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -57,6 +58,8 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
 
     private CoordinatorLayout coordinatorLayout;
 
+    private SwipeRefreshLayout swipeContainer;
+
     private ProductListPresenter presenter;
     ListView exampleListView;
 
@@ -75,9 +78,27 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
+
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
 
-        presenter = new ProductListPresenter(ProductListActivity.this);
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code to refresh the list here.
+                // Make sure you call swipeContainer.setRefreshing(false)
+                // once the network request has completed successfully.
+                GetItems();
+            }
+        });
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
+    presenter = new ProductListPresenter(ProductListActivity.this);
 
         items = new ArrayList<Product>();
 
@@ -318,6 +339,10 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
         {
             createAndShowDialog(getString(R.string.nosql_dialog_title_failed_operation_text), ex.getMessage());
         }
+
+        // Now we call setRefreshing(false) to signal refresh has finished
+        swipeContainer.setRefreshing(false);
+
     }
 
     private AsyncTask<Void, Void, Void> runAsyncTask(AsyncTask<Void, Void, Void> task) {
