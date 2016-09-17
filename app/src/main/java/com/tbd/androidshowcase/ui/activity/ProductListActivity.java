@@ -150,8 +150,6 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
         {
             EditItem(product, false);
         }
-
-        GetItems();
     }
 
     @Override
@@ -161,60 +159,51 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
         // TODO: Implement callable instead so I can return the new product?
         AWSMobileClient.initializeMobileClientIfNecessary(this);
 
-        new Thread(new Runnable() {
+        final Callable<Product> f = new Callable<Product>() {
+
             @Override
-            public void run() {
+            public Product call() throws Exception {
 
-                try {
-                    final Product newItem = (Product)productTable.addNewItem(product);
-
-                    Snackbar snackbar = Snackbar.make(coordinatorLayout, "Item added", Snackbar.LENGTH_LONG)
-                            .setAction("UNDO", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view){
-
-                                    RemoveItem(newItem);
-                                }
-                            });
-                    snackbar.show();
-
-
-                } catch (final AmazonClientException ex) {
-                    // The insertSampleData call already logs the error, so we only need to
-                    // show the error dialog to the user at this point.
-                    createAndShowDialog(getString(R.string.nosql_dialog_title_failed_operation_text), ex.getMessage());
-                    return;
-                }
-/*                ThreadUtils.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        createAndShowDialog(getString(R.string.nosql_dialog_message_added_sample_data_text), getString(R.string.nosql_dialog_title_added_sample_data_text)); }
-                });*/
-
-
-            }
-        }).start();
-    }
-
-    private Runnable refreshProductsList(final ArrayList<Product> productList)
-    {
-        return new Runnable(){
-
-            public void run(){
-
-                productsAdapter.refreshProducts(productList);
-
-     /*           items.clear();
-                items.addAll(itemsList);
-
-
-                productsAdapter.addAll(items);
-                productsAdapter.notifyDataSetChanged();
-                exampleListView.invalidateViews();
-                exampleListView.refreshDrawableState()*/;
-            }
+                return (Product)productTable.addNewItem(product);
+            };
 
         };
+
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Future<Product> result = executor.submit(f);
+
+        try
+        {
+            final Product newItem = result.get();
+
+            GetItems();
+
+            Snackbar snackbar = Snackbar.make(coordinatorLayout, "Item added", Snackbar.LENGTH_LONG)
+                    .setAction("UNDO", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view){
+
+                            RemoveItem(newItem);
+                        }
+                    });
+            snackbar.show();
+
+        }catch(final Exception ex)
+        {
+            createAndShowDialog(getString(R.string.nosql_dialog_title_failed_operation_text), ex.getMessage());
+        }
+    }
+
+    private void refreshProductsList()
+    {
+        exampleListView.invalidate();
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                productsAdapter.refreshProducts((ArrayList<Product>)items);
+            }
+        });
     }
 
     @Override
@@ -223,33 +212,40 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
         // Obtain a reference to the identity manager.
         AWSMobileClient.initializeMobileClientIfNecessary(this);
 
-        new Thread(new Runnable() {
+        final Callable<Void> f = new Callable<Void>() {
+
             @Override
-            public void run() {
-                try {
-                    productTable.removeItem(product.getProductId());
+            public Void call() throws Exception {
 
-                } catch (final AmazonClientException ex) {
-                    // The insertSampleData call already logs the error, so we only need to
-                    // show the error dialog to the user at this point.
-                    createAndShowDialog(getString(R.string.nosql_dialog_title_failed_operation_text), ex.getMessage());
-                    return;
-                }
+                productTable.removeItem(product.getProductId());
 
-                Snackbar snackbar = Snackbar.make(coordinatorLayout, "Item Removed", Snackbar.LENGTH_LONG)
-                        .setAction("UNDO", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view){
+                return null;
+            };
+        };
 
-                                AddNewItem(product);
-                            }
-                        });
-                snackbar.show();
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Future<Void> result = executor.submit(f);
 
-            }
-        }).start();
+        try
+        {
+            final Void voidResult = result.get();
 
-        GetItems();
+            GetItems();
+
+            Snackbar snackbar = Snackbar.make(coordinatorLayout, "Item Removed", Snackbar.LENGTH_LONG)
+                    .setAction("UNDO", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view){
+
+                            AddNewItem(product);
+                        }
+                    });
+            snackbar.show();
+
+        }catch(final Exception ex)
+        {
+            createAndShowDialog(getString(R.string.nosql_dialog_title_failed_operation_text), ex.getMessage());
+        }
     }
 
     @Override
@@ -258,32 +254,39 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
         // Obtain a reference to the identity manager.
         AWSMobileClient.initializeMobileClientIfNecessary(this);
 
-        new Thread(new Runnable() {
+        final Callable<Product> f = new Callable<Product>() {
+
             @Override
-            public void run() {
-                try {
-                    final Product originalProduct = (Product)productTable.editItem(product);
+            public Product call() throws Exception {
 
+                return (Product)productTable.editItem(product);
+            };
 
-                    Snackbar snackbar = Snackbar.make(coordinatorLayout, isRestore ? "Item Restored" : "Item Updated", Snackbar.LENGTH_LONG)
-                            .setAction("UNDO", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view){
+        };
 
-                                    EditItem(originalProduct, !isRestore);
-                                }
-                            });
-                    snackbar.show();
-                } catch (final AmazonClientException ex) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Future<Product> result = executor.submit(f);
 
-                    // The insertSampleData call already logs the error, so we only need to
-                    // show the error dialog to the user at this point.
-                    createAndShowDialog(getString(R.string.nosql_dialog_title_failed_operation_text), ex.getMessage());
-                    return;
-                }
+        try
+        {
+            final Product originalProduct = result.get();
 
-            }
-        }).start();
+            GetItems();
+
+            Snackbar snackbar = Snackbar.make(coordinatorLayout, isRestore ? "Item Restored" : "Item Updated", Snackbar.LENGTH_LONG)
+                    .setAction("UNDO", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view){
+
+                            EditItem(originalProduct, !isRestore);
+                        }
+                    });
+            snackbar.show();
+
+        }catch(final Exception ex)
+        {
+            createAndShowDialog(getString(R.string.nosql_dialog_title_failed_operation_text), ex.getMessage());
+        }
     }
 
     @Override
@@ -294,11 +297,11 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
 
         final Callable<ArrayList<ITableObject>> f = new Callable<ArrayList<ITableObject>>() {
 
-            @Override
-            public ArrayList<ITableObject> call() throws Exception {
+                @Override
+                public ArrayList<ITableObject> call() throws Exception {
 
-            return (ArrayList<ITableObject>)productTable.getItems();
-        };
+                    return (ArrayList<ITableObject>)productTable.getItems();
+                };
 
         };
 
@@ -307,26 +310,14 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
 
         try
         {
-            //productsAdapter.clear();
             items = result.get();
 
-            productsAdapter.refreshProducts((ArrayList<Product>)items);
-
-            //runOnUiThread(refreshProductsList((ArrayList<Product>) items));
-
-            //productsAdapter.clear();
-
-            //productsAdapter.addAll((ArrayList<Product>)items);
-
-            //productsAdapter.notifyDataSetChanged();
+            refreshProductsList();
 
         }catch(final Exception ex)
         {
-            // The insertSampleData call already logs the error, so we only need to
-            // show the error dialog to the user at this point.
             createAndShowDialog(getString(R.string.nosql_dialog_title_failed_operation_text), ex.getMessage());
         }
-
     }
 
     private AsyncTask<Void, Void, Void> runAsyncTask(AsyncTask<Void, Void, Void> task) {
