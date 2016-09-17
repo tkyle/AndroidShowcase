@@ -45,6 +45,7 @@ import com.tbd.androidshowcase.utility.ThreadUtils;
 import com.tbd.androidshowcase.view.IProductListView;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -78,7 +79,9 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
 
         presenter = new ProductListPresenter(ProductListActivity.this);
 
-        productsAdapter = new ProductsAdapter(this, new ArrayList<Product>());
+        items = new ArrayList<Product>();
+
+        productsAdapter = new ProductsAdapter(this, (ArrayList<Product>)items);
 
         exampleListView = (ListView) findViewById( R.id.exampleListView );
         exampleListView.setAdapter(productsAdapter);
@@ -145,21 +148,22 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
             AddNewItem(product);
         else
         {
-            EditItem(product);
+            EditItem(product, false);
         }
+
+        GetItems();
     }
 
     @Override
     public void AddNewItem(final Product product)
     {
        // Obtain a reference to the identity manager.
+        // TODO: Implement callable instead so I can return the new product?
         AWSMobileClient.initializeMobileClientIfNecessary(this);
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-
-
 
                 try {
                     final Product newItem = (Product)productTable.addNewItem(product);
@@ -173,6 +177,8 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
                                 }
                             });
                     snackbar.show();
+
+
                 } catch (final AmazonClientException ex) {
                     // The insertSampleData call already logs the error, so we only need to
                     // show the error dialog to the user at this point.
@@ -190,6 +196,27 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
         }).start();
     }
 
+    private Runnable refreshProductsList(final ArrayList<Product> productList)
+    {
+        return new Runnable(){
+
+            public void run(){
+
+                productsAdapter.refreshProducts(productList);
+
+     /*           items.clear();
+                items.addAll(itemsList);
+
+
+                productsAdapter.addAll(items);
+                productsAdapter.notifyDataSetChanged();
+                exampleListView.invalidateViews();
+                exampleListView.refreshDrawableState()*/;
+            }
+
+        };
+    }
+
     @Override
     public void RemoveItem(final Product product)
     {
@@ -201,6 +228,7 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
             public void run() {
                 try {
                     productTable.removeItem(product.getProductId());
+
                 } catch (final AmazonClientException ex) {
                     // The insertSampleData call already logs the error, so we only need to
                     // show the error dialog to the user at this point.
@@ -220,10 +248,12 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
 
             }
         }).start();
+
+        GetItems();
     }
 
     @Override
-    public void EditItem(final Product product)
+    public void EditItem(final Product product, final Boolean isRestore)
     {
         // Obtain a reference to the identity manager.
         AWSMobileClient.initializeMobileClientIfNecessary(this);
@@ -232,7 +262,18 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
             @Override
             public void run() {
                 try {
-                    productTable.editItem(product);
+                    final Product originalProduct = (Product)productTable.editItem(product);
+
+
+                    Snackbar snackbar = Snackbar.make(coordinatorLayout, isRestore ? "Item Restored" : "Item Updated", Snackbar.LENGTH_LONG)
+                            .setAction("UNDO", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view){
+
+                                    EditItem(originalProduct, !isRestore);
+                                }
+                            });
+                    snackbar.show();
                 } catch (final AmazonClientException ex) {
 
                     // The insertSampleData call already logs the error, so we only need to
@@ -240,11 +281,7 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
                     createAndShowDialog(getString(R.string.nosql_dialog_title_failed_operation_text), ex.getMessage());
                     return;
                 }
-                ThreadUtils.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        createAndShowDialog(getString(R.string.nosql_dialog_message_added_sample_data_text), getString(R.string.nosql_dialog_title_added_sample_data_text)); }
-                });
+
             }
         }).start();
     }
@@ -270,11 +307,18 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
 
         try
         {
+            //productsAdapter.clear();
             items = result.get();
 
-            productsAdapter.clear();
+            productsAdapter.refreshProducts((ArrayList<Product>)items);
 
-            productsAdapter.addAll((ArrayList<Product>)items);
+            //runOnUiThread(refreshProductsList((ArrayList<Product>) items));
+
+            //productsAdapter.clear();
+
+            //productsAdapter.addAll((ArrayList<Product>)items);
+
+            //productsAdapter.notifyDataSetChanged();
 
         }catch(final Exception ex)
         {
@@ -282,6 +326,7 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
             // show the error dialog to the user at this point.
             createAndShowDialog(getString(R.string.nosql_dialog_title_failed_operation_text), ex.getMessage());
         }
+
     }
 
     private AsyncTask<Void, Void, Void> runAsyncTask(AsyncTask<Void, Void, Void> task) {

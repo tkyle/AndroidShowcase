@@ -100,7 +100,7 @@ public class ProductTable extends NoSQLTableBase
     }
 
     @Override
-    public void editItem(ITableObject tableObject) throws AmazonClientException {
+    public ITableObject editItem(ITableObject tableObject) throws AmazonClientException {
 
         Product product = (Product)tableObject;
 
@@ -125,17 +125,24 @@ public class ProductTable extends NoSQLTableBase
         if (resultsIterator.hasNext()) {
             final Product item = resultsIterator.next();
 
+            Product originalProduct = new Product(item);
+            //Product originalProduct = item;
+
             item.setName(product.getName());
             item.setDescription(product.getDescription());
             item.setCost(product.getCost());
             // Demonstrate editing a single item.
             try {
                 mapper.save(item);
+
+                return originalProduct;
             } catch (final AmazonClientException ex) {
                 Log.e(LOG_TAG, "Failed editing item : " + ex.getMessage(), ex);
                 throw ex;
             }
         }
+
+        return null;
     }
 
     @Override

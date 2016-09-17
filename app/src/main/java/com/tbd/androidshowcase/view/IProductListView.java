@@ -9,6 +9,6 @@ public interface IProductListView
 {
     void AddNewItem(Product product);
     void RemoveItem(Product product);
-    void EditItem(Product product);
+    void EditItem(Product product, Boolean isRestore);
     void GetItems();
 }

@@ -30,6 +30,15 @@ public class Product implements ITableObject
         setProductId(productId);
     }
 
+    public Product(Product oldProduct)
+    {
+        this._productId = oldProduct.getProductId();
+        this._userId = oldProduct.getUserId();
+        this._name = oldProduct.getName();
+        this._description = oldProduct.getDescription();
+        this._cost = oldProduct._cost;
+    }
+
     @DynamoDBHashKey(attributeName = "UserId")
     @DynamoDBIndexHashKey(attributeName = "UserId", globalSecondaryIndexName = "DateSorted")
     public String getUserId() {

@@ -18,18 +18,14 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
         <ListView
             android:id="@+id/exampleListView"
             android:layout_width="match_parent"
             android:background="@color/white"
             android:layout_height="wrap_content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             tools:listitem="@layout/examplelist_row"/>
 
-    </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/newButton"

@@ -9,16 +9,22 @@ import android.widget.TextView;
 
 import com.tbd.androidshowcase.R;
 import com.tbd.androidshowcase.model.Product;
+import com.tbd.androidshowcase.tables.ITableObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Trevor on 9/11/2016.
  */
 public class ProductsAdapter  extends ArrayAdapter<Product> {
 
+    private ArrayList<Product> products;
+
     public ProductsAdapter(Context context, ArrayList<Product> products) {
         super(context, 0, products);
+
+        this.products = products;
     }
 
     @Override
@@ -44,5 +50,11 @@ public class ProductsAdapter  extends ArrayAdapter<Product> {
 
         // Return the completed view to render on screen
         return convertView;
+    }
+
+    public void refreshProducts(ArrayList<Product> productList) {
+        this.products.clear();
+        this.products.addAll(productList);
+        notifyDataSetChanged();
     }
 }
