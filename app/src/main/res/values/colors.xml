@@ -10,4 +10,5 @@
     <color name="light_grey">#bababa</color>
     <color name="black">#000000</color>
     <color name="blue">#ff1118ff</color>
+    <color name="listViewBackground">#4D4D4D</color>
 </resources>
