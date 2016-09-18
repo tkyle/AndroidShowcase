@@ -143,7 +143,7 @@ public class ProductListPresenter
             this.GetProducts();
 
             // Give the user a chance to undo the edit
-            view.ShowEditProductSnackbar(originalProduct, !isRestore);
+            view.ShowEditProductSnackbar(originalProduct, isRestore);
 
         }catch(final Exception ex)
         {

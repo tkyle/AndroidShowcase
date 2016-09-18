@@ -6,5 +6,12 @@
     <string name="menu_edit">Edit</string>
     <string name="menu_delete">Delete</string>
     <string name="menu_save">Save</string>
+    <string name="product_list_action_bar_title">Product List</string>
+    <string name="product_dialog_title">Product Name</string>
+    <string name="product_added_snackbar_message">Product Added</string>
+    <string name="product_undo">Undo</string>
+    <string name="product_restored_snackbar_message">Product Restored</string>
+    <string name="product_updated_snackbar_message">Product Updated</string>
+    <string name="product_removed_snackbar_message">Product Removed</string>
 
 </resources>

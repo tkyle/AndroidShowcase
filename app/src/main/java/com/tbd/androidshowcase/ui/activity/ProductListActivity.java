@@ -124,7 +124,7 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
         setSupportActionBar(myToolbar);
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
-        ab.setTitle("Product List");
+        ab.setTitle(R.string.product_list_action_bar_title);
     }
 
     // endregion
@@ -134,7 +134,7 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
     public void showDialog(Boolean isNew, Product product)
     {
         FragmentManager fm = getSupportFragmentManager();
-        ProductFragment productDialog = ProductFragment.newInstance("Product Name", product, isNew);
+        ProductFragment productDialog = ProductFragment.newInstance(getString(R.string.product_dialog_title), product, isNew);
         productDialog.show(fm, "fragment_product");
     }
 
@@ -187,8 +187,8 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
     @Override
     public void ShowProductAddedSnackbar(final Product newItem)
     {
-        Snackbar snackbar = Snackbar.make(coordinatorLayout, "Item added", Snackbar.LENGTH_LONG)
-                .setAction("UNDO", new View.OnClickListener() {
+        Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.product_added_snackbar_message, Snackbar.LENGTH_LONG)
+                .setAction(R.string.product_undo, new View.OnClickListener() {
                     @Override
                     public void onClick(View view){
 
@@ -202,8 +202,8 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
     @Override
     public void ShowEditProductSnackbar(final Product originalProduct, final Boolean isRestore)
     {
-        Snackbar snackbar = Snackbar.make(coordinatorLayout, isRestore ? "Item Restored" : "Item Updated", Snackbar.LENGTH_LONG)
-                .setAction("UNDO", new View.OnClickListener() {
+        Snackbar snackbar = Snackbar.make(coordinatorLayout, isRestore ? R.string.product_restored_snackbar_message : R.string.product_updated_snackbar_message, Snackbar.LENGTH_LONG)
+                .setAction(R.string.product_undo, new View.OnClickListener() {
                     @Override
                     public void onClick(View view){
 
@@ -217,8 +217,8 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
     @Override
     public void ShowRemoveProductSnackbar(final Product product)
     {
-        Snackbar snackbar = Snackbar.make(coordinatorLayout, "Item Removed", Snackbar.LENGTH_LONG)
-                .setAction("UNDO", new View.OnClickListener() {
+        Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.product_removed_snackbar_message, Snackbar.LENGTH_LONG)
+                .setAction(R.string.product_undo, new View.OnClickListener() {
                     @Override
                     public void onClick(View view){
 
