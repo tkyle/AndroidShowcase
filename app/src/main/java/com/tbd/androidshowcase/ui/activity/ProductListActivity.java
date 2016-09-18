@@ -79,8 +79,9 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
             @Override
             public void onRefresh() {
 
-                // Pull to refresh for products list.
-                presenter.GetProducts();
+            // Pull to refresh for products list.
+            presenter.GetProducts();
+
             }
         });
 
@@ -111,7 +112,9 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
         newButton = (FloatingActionButton)findViewById(R.id.newButton);
         newButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+
                 showDialog(true, new Product(java.util.UUID.randomUUID().toString()));
+
             }});
     }
 
@@ -131,16 +134,16 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
     public void showDialog(Boolean isNew, Product product)
     {
         FragmentManager fm = getSupportFragmentManager();
-        ProductFragment productDialog = ProductFragment.newInstance("Type your name", product, isNew);
+        ProductFragment productDialog = ProductFragment.newInstance("Product Name", product, isNew);
         productDialog.show(fm, "fragment_product");
     }
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         if (v.getId() == R.id.productsListView) {
+
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
             menu.setHeaderTitle(((Product)productList.get(info.position)).getName());
-
             MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.note_menu, menu);
         }
@@ -192,6 +195,7 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
                         presenter.onDeleteItemClicked(newItem);
                     }
                 });
+
         snackbar.show();
     }
 

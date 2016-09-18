@@ -23,11 +23,17 @@ import java.util.concurrent.Future;
  */
 public class ProductListPresenter
 {
+    // region Fields
+
     IProductListView view;
     private NoSQLTableBase productTable;
     private final String tableName = "Products";
     Context _context;
     ArrayList<? extends ITableObject> items;
+
+    // endregion
+
+    // region Constructor
 
     public ProductListPresenter(IProductListView view, Context context)
     {
@@ -35,6 +41,8 @@ public class ProductListPresenter
         productTable = TableFactory.instance(context).getNoSQLTableByTableName(tableName);
         _context = context;
     }
+
+    // endregion
 
     public void GetProducts()
     {
