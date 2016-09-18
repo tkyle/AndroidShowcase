@@ -157,7 +157,7 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
                 showDialog(false, (Product)productList.get(info.position));
                 return true;
             case R.id.delete:
-                presenter.onDeleteItemClicked((Product)productList.get(info.position));
+                presenter.RemoveProduct((Product)productList.get(info.position));
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -167,9 +167,9 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
     @Override
     public void onFinishEditDialog(Product product, Boolean isNew) {
         if(isNew)
-            presenter.onAddNewItemClicked(product);
+            presenter.AddProduct(product);
         else
-            presenter.onEditItemClicked(product, false);
+            presenter.EditProduct(product, false);
     }
 
     private void createAndShowDialog(final String message, final String title) {
@@ -192,7 +192,7 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
                     @Override
                     public void onClick(View view){
 
-                        presenter.onDeleteItemClicked(newItem);
+                        presenter.RemoveProduct(newItem);
                     }
                 });
 
@@ -207,7 +207,7 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
                     @Override
                     public void onClick(View view){
 
-                        presenter.onEditItemClicked(originalProduct, !isRestore);
+                        presenter.EditProduct(originalProduct, !isRestore);
                     }
                 });
 
@@ -222,8 +222,7 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
                     @Override
                     public void onClick(View view){
 
-                        //AddNewItem(product);
-                        presenter.onAddNewItemClicked(product);
+                        presenter.AddProduct(product);
                     }
                 });
 

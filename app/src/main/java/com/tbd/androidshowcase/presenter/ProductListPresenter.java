@@ -29,7 +29,7 @@ public class ProductListPresenter
     private NoSQLTableBase productTable;
     private final String tableName = "Products";
     Context _context;
-    ArrayList<? extends ITableObject> items;
+    ArrayList<? extends ITableObject> products;
 
     // endregion
 
@@ -43,6 +43,8 @@ public class ProductListPresenter
     }
 
     // endregion
+
+    // region Methods
 
     public void GetProducts()
     {
@@ -64,24 +66,24 @@ public class ProductListPresenter
 
         try
         {
-            items = result.get();
+            // Wait for the results
+            products = result.get();
 
-            view.RefreshProductsList((ArrayList<Product>)items);
+            view.RefreshProductsList((ArrayList<Product>)products);
 
         }catch(final Exception ex)
         {
             view.ShowError(_context.getString(R.string.nosql_dialog_title_failed_operation_text), ex.getMessage());
         }
 
-        // Now we call setRefreshing(false) to signal refresh has finished
+        // setRefreshing(false) to signal refresh has finished
         view.SetSwipeContainerRefreshStatus(false);
 
     }
 
-    public void onAddNewItemClicked(final Product product)
+    public void AddProduct(final Product product)
     {
         // Obtain a reference to the identity manager.
-        // TODO: Implement callable instead so I can return the new product?
         AWSMobileClient.initializeMobileClientIfNecessary(_context);
 
         final Callable<Product> f = new Callable<Product>() {
@@ -99,20 +101,22 @@ public class ProductListPresenter
 
         try
         {
+            // Wait for the results
             final Product newItem = result.get();
 
+            // Refresh the list
             this.GetProducts();
 
+            // Show snackbar to give the user a chance to remove the product from the list
             view.ShowProductAddedSnackbar(newItem);
 
         }catch(final Exception ex)
         {
             view.ShowError(_context.getString(R.string.nosql_dialog_title_failed_operation_text), ex.getMessage());
         }
-
     }
 
-    public void onEditItemClicked(final Product product, Boolean isRestore)
+    public void EditProduct(final Product product, Boolean isRestore)
     {
         // Obtain a reference to the identity manager.
         AWSMobileClient.initializeMobileClientIfNecessary(_context);
@@ -132,10 +136,13 @@ public class ProductListPresenter
 
         try
         {
+            // Wait for the results
             final Product originalProduct = result.get();
 
+            // Refresh list
             this.GetProducts();
 
+            // Give the user a chance to undo the edit
             view.ShowEditProductSnackbar(originalProduct, !isRestore);
 
         }catch(final Exception ex)
@@ -144,7 +151,7 @@ public class ProductListPresenter
         }
     }
 
-    public void onDeleteItemClicked(final Product product)
+    public void RemoveProduct(final Product product)
     {
         // Obtain a reference to the identity manager.
         AWSMobileClient.initializeMobileClientIfNecessary(_context);
@@ -165,10 +172,13 @@ public class ProductListPresenter
 
         try
         {
+            // Wait for the results
             final Void voidResult = result.get();
 
+            // Refresh
             this.GetProducts();
 
+            // Give the user a chance to undo the delete
             view.ShowRemoveProductSnackbar(product);
 
         }catch(final Exception ex)
@@ -177,4 +187,5 @@ public class ProductListPresenter
         }
     }
 
+    // endregion
 }
