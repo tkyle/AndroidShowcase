@@ -18,11 +18,15 @@ import com.tbd.androidshowcase.R;
 
 public class MoveCircleActivity extends AppCompatActivity {
 
-    boolean drawCircle = false;
+    // region Fields
 
+    boolean drawCircle = false;
     float xValue = 0;
     float yValue = 0;
 
+    // endregion
+
+    // region Constructor
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,20 +36,24 @@ public class MoveCircleActivity extends AppCompatActivity {
 
         LinearLayout linearLayout = (LinearLayout)findViewById(R.id.movecirclelayout);
 
-        linearLayout.addView(new MyView(this));
+        linearLayout.addView(new DrawView(this));
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.custom_toolbar);
         setSupportActionBar(myToolbar);
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
-        ab.setTitle("Move Circle");
+        ab.setTitle(R.string.move_circle_action_bar_title);
     }
 
-    public class MyView extends View
+    // endregion
+
+    // region Draw View
+
+    public class DrawView extends View
     {
         Paint paint;
 
-        public MyView(Context context)
+        public DrawView(Context context)
         {
             super(context);
 
@@ -90,10 +98,12 @@ public class MoveCircleActivity extends AppCompatActivity {
                 paint.setColor(Color.WHITE);
                 canvas.drawPaint(paint);
 
-                // Use Color.parseColor to define HTML colors
-                paint.setColor(Color.parseColor("#CD5C5C"));
+                paint.setColor(getColor(R.color.moveCircleDot));
                 canvas.drawCircle(xValue, yValue, radius, paint);
             }
         }
+
+    // endregion
+
     }
 }

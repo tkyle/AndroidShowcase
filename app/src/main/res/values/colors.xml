@@ -11,4 +11,5 @@
     <color name="black">#000000</color>
     <color name="blue">#ff1118ff</color>
     <color name="listViewBackground">#4D4D4D</color>
+    <color name="moveCircleDot">#CD5C5C</color>
 </resources>
