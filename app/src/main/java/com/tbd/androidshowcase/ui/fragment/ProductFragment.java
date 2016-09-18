@@ -39,6 +39,7 @@ public class ProductFragment extends android.support.v4.app.DialogFragment
     private EditText productCost;
     private Boolean isNew;
     private Product product;
+    private View view;
 
     // endregion
 
@@ -68,8 +69,27 @@ public class ProductFragment extends android.support.v4.app.DialogFragment
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.dialog_custom, container);
 
+        view = inflater.inflate(R.layout.dialog_custom, container);
+
+        setProductValues();
+
+        SetupViewsAndContainers();
+
+        return view;
+    }
+
+    private void setProductValues()
+    {
+        product = new Product();
+        product.setProductId(getArguments().getString("productId"));
+        product.setName(getArguments().getString("productName"));
+        product.setDescription(getArguments().getString("productDescription"));
+        product.setCost(getArguments().getString("productCost") != null ? Double.parseDouble(getArguments().getString("productCost")) : 0.00);
+    }
+
+    private void SetupViewsAndContainers()
+    {
         // retrieve display dimensions
         Rect displayRectangle = new Rect();
         Window window = getActivity().getWindow();
@@ -77,10 +97,32 @@ public class ProductFragment extends android.support.v4.app.DialogFragment
 
         view.setMinimumWidth((int)(displayRectangle.width() * 0.7f));
 
+        String title = getArguments().getString("title");
+        getDialog().setTitle(title);
+
+        setupEditTextViews();
+        setupSubmitButton();
+        setupDismissButton();
+    }
+
+    private void setupEditTextViews()
+    {
         productName =  (EditText) view.findViewById(R.id.txtProductName);
         productDescription =  (EditText) view.findViewById(R.id.txtProductDescription);
         productCost =  (EditText) view.findViewById(R.id.txtProductCost);
 
+        isNew = getArguments().getBoolean("isNew");
+
+        if(!isNew)
+        {
+            productName.setText(product.getName());
+            productDescription.setText(product.getDescription());
+            productCost.setText(product.getCost().toString());
+        }
+    }
+
+    private void setupDismissButton()
+    {
         btnDismiss = (ImageButton) view.findViewById(R.id.btnDismiss);
         btnDismiss.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,7 +130,11 @@ public class ProductFragment extends android.support.v4.app.DialogFragment
                 dismiss();
             }
         });
+    }
 
+
+    private void setupSubmitButton()
+    {
         btnSubmit = (Button) view.findViewById(R.id.btnSubmit);
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,26 +149,6 @@ public class ProductFragment extends android.support.v4.app.DialogFragment
                 dismiss();
             }
         });
-
-        String title = getArguments().getString("title");
-        getDialog().setTitle(title);
-
-        isNew = getArguments().getBoolean("isNew");
-
-        product = new Product();
-        product.setProductId(getArguments().getString("productId"));
-        product.setName(getArguments().getString("productName"));
-        product.setDescription(getArguments().getString("productDescription"));
-        product.setCost(getArguments().getString("productCost") != null ? Double.parseDouble(getArguments().getString("productCost")) : 0.00);
-
-        if(!isNew)
-        {
-            productName.setText(product.getName());
-            productDescription.setText(product.getDescription());
-            productCost.setText(product.getCost().toString());
-        }
-
-        return view;
     }
 
     // endregion
