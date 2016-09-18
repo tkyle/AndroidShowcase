@@ -54,52 +54,70 @@ import java.util.concurrent.Future;
 
 public class ProductListActivity extends AppCompatActivity implements IProductListView, ProductFragment.ProductFragmentListener {
 
-    public static final String BUNDLE_ARGS_TABLE_TITLE = "tableTitle";
+    // region Fields
 
+    private final String tableName = "Products";
     private CoordinatorLayout coordinatorLayout;
-
     private SwipeRefreshLayout swipeContainer;
-
     private ProductListPresenter presenter;
     ListView exampleListView;
-
     ArrayList<? extends ITableObject> items;
-
-    private IdentityManager identityManager;
-
     private NoSQLTableBase productTable;
-
     ProductsAdapter productsAdapter;
-
     FloatingActionButton newButton;
+
+    // endregion
+
+    // region Constructor
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
-
+        presenter = new ProductListPresenter(ProductListActivity.this);
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
 
-        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+        setupSwipeContainer();
 
+        setupProductsList();
+
+        setupActionButton();
+
+        setupActionBar();
+
+        //final String tableName = "Products";//args.getString(BUNDLE_ARGS_TABLE_TITLE);
+        productTable = TableFactory.instance(getApplicationContext()).getNoSQLTableByTableName(tableName);
+
+        // Get Products list on Activity creation
+        GetItems();
+    }
+
+    // endregion
+
+    // region Setup Methods
+
+    private void setupSwipeContainer()
+    {
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // Your code to refresh the list here.
-                // Make sure you call swipeContainer.setRefreshing(false)
-                // once the network request has completed successfully.
+
+                // Pull to refresh for products list.
                 GetItems();
             }
         });
+
         // Configure the refreshing colors
         swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
+    }
 
-    presenter = new ProductListPresenter(ProductListActivity.this);
-
+    private void setupProductsList()
+    {
         items = new ArrayList<Product>();
 
         productsAdapter = new ProductsAdapter(this, (ArrayList<Product>)items);
@@ -107,6 +125,11 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
         exampleListView = (ListView) findViewById( R.id.exampleListView );
         exampleListView.setAdapter(productsAdapter);
 
+        registerForContextMenu(exampleListView);
+    }
+
+    private void setupActionButton()
+    {
         // FloatingActionButton is using a wrapper (it seems) and it doesn't like the onClick being
         // declared in XML. May be able to fix this by updating the design library.
         // This is working for now.
@@ -115,20 +138,18 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
             public void onClick(View v) {
                 showDialog(true, new Product(java.util.UUID.randomUUID().toString()));
             }});
+    }
 
-        registerForContextMenu(exampleListView);
-
-        final String tableName = "Products";//args.getString(BUNDLE_ARGS_TABLE_TITLE);
-        productTable = TableFactory.instance(getApplicationContext()).getNoSQLTableByTableName(tableName);
-
+    private void setupActionBar()
+    {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.custom_toolbar);
         setSupportActionBar(myToolbar);
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
         ab.setTitle("Product List");
-
-        GetItems();
     }
+
+    // endregion
 
     public void showDialog(Boolean isNew, Product product)
     {
@@ -351,15 +372,6 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
         } else {
             return task.execute();
         }
-    }
-
-    private void createAndShowDialogFromTask(final Exception exception, String title) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                createAndShowDialog(exception, "Error");
-            }
-        });
     }
 
     private void createAndShowDialog(Exception exception, String title) {
