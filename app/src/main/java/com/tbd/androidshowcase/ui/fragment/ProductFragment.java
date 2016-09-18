@@ -1,29 +1,17 @@
 package com.tbd.androidshowcase.ui.fragment;
 
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDialogFragment;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.tbd.androidshowcase.R;
 import com.tbd.androidshowcase.model.Product;
-import com.tbd.androidshowcase.presenter.ProductListPresenter;
-import com.tbd.androidshowcase.ui.activity.ProductListActivity;
 
 /**
  * Created by Trevor on 9/13/2016.
@@ -70,7 +58,7 @@ public class ProductFragment extends android.support.v4.app.DialogFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        view = inflater.inflate(R.layout.dialog_custom, container);
+        view = inflater.inflate(R.layout.dialog_product, container);
 
         setProductValues();
 
