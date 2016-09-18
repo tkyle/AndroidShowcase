@@ -56,12 +56,11 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
 
     // region Fields
 
-//    private final String tableName = "Products";
     private CoordinatorLayout coordinatorLayout;
     private SwipeRefreshLayout swipeContainer;
     private ProductListPresenter presenter;
-    ListView exampleListView;
-    ArrayList<? extends ITableObject> items;
+    ListView productsListView;
+    ArrayList<? extends ITableObject> productList;
     private NoSQLTableBase productTable;
     ProductsAdapter productsAdapter;
     FloatingActionButton newButton;
@@ -115,14 +114,14 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
 
     private void setupProductsList()
     {
-        items = new ArrayList<Product>();
+        productList = new ArrayList<Product>();
 
-        productsAdapter = new ProductsAdapter(this, (ArrayList<Product>)items);
+        productsAdapter = new ProductsAdapter(this, (ArrayList<Product>)productList);
 
-        exampleListView = (ListView) findViewById( R.id.exampleListView );
-        exampleListView.setAdapter(productsAdapter);
+        productsListView = (ListView) findViewById( R.id.productsListView );
+        productsListView.setAdapter(productsAdapter);
 
-        registerForContextMenu(exampleListView);
+        registerForContextMenu(productsListView);
     }
 
     private void setupActionButton()
@@ -157,9 +156,9 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        if (v.getId() == R.id.exampleListView) {
+        if (v.getId() == R.id.productsListView) {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-            menu.setHeaderTitle(((Product)items.get(info.position)).getName());
+            menu.setHeaderTitle(((Product)productList.get(info.position)).getName());
 
             MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.note_menu, menu);
@@ -171,10 +170,10 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch(item.getItemId()) {
             case R.id.edit:
-                showDialog(false, (Product)items.get(info.position));
+                showDialog(false, (Product)productList.get(info.position));
                 return true;
             case R.id.delete:
-                presenter.onDeleteItemClicked((Product)items.get(info.position));
+                presenter.onDeleteItemClicked((Product)productList.get(info.position));
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -243,7 +242,7 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
     @Override
     public void RefreshProductsList(final ArrayList<Product> products)
     {
-        exampleListView.invalidate();
+        productsListView.invalidate();
 
         runOnUiThread(new Runnable() {
             @Override
