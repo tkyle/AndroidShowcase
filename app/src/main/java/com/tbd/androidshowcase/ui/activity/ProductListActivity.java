@@ -135,7 +135,7 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
     {
         FragmentManager fm = getSupportFragmentManager();
         ProductFragment productDialog = ProductFragment.newInstance(getString(R.string.product_dialog_title), product, isNew);
-        productDialog.show(fm, "fragment_product");
+        productDialog.show(fm, getString(R.string.fragment_dialog_tag));
     }
 
     @Override
