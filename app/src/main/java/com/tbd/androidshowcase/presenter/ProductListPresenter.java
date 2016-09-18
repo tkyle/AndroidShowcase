@@ -72,8 +72,6 @@ public class ProductListPresenter
 
     public void onAddNewItemClicked(final Product product)
     {
-        //view.AddNewItem(product);
-
         // Obtain a reference to the identity manager.
         // TODO: Implement callable instead so I can return the new product?
         AWSMobileClient.initializeMobileClientIfNecessary(_context);
@@ -95,7 +93,6 @@ public class ProductListPresenter
         {
             final Product newItem = result.get();
 
-            //GetItems();
             this.GetItems();
 
             view.ShowItemAddedSnackbar(newItem);
@@ -107,14 +104,69 @@ public class ProductListPresenter
 
     }
 
-    public void onEditItemClicked(Product product, Boolean isRestore)
+    public void onEditItemClicked(final Product product, Boolean isRestore)
     {
-        view.EditItem(product, isRestore);
+        // Obtain a reference to the identity manager.
+        AWSMobileClient.initializeMobileClientIfNecessary(_context);
+
+        final Callable<Product> f = new Callable<Product>() {
+
+            @Override
+            public Product call() throws Exception {
+
+                return (Product)productTable.editItem(product);
+            };
+
+        };
+
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Future<Product> result = executor.submit(f);
+
+        try
+        {
+            final Product originalProduct = result.get();
+
+            this.GetItems();
+
+            view.ShowEditItemSnackbar(originalProduct, !isRestore);
+
+        }catch(final Exception ex)
+        {
+            view.ShowError(_context.getString(R.string.nosql_dialog_title_failed_operation_text), ex.getMessage());
+        }
     }
 
-    public void onDeleteItemClicked(Product product)
+    public void onDeleteItemClicked(final Product product)
     {
-        view.RemoveItem(product);
+        // Obtain a reference to the identity manager.
+        AWSMobileClient.initializeMobileClientIfNecessary(_context);
+
+        final Callable<Void> f = new Callable<Void>() {
+
+            @Override
+            public Void call() throws Exception {
+
+                productTable.removeItem(product.getProductId());
+
+                return null;
+            };
+        };
+
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Future<Void> result = executor.submit(f);
+
+        try
+        {
+            final Void voidResult = result.get();
+
+            this.GetItems();
+
+            view.ShowRemoveItemSnackbar(product);
+
+        }catch(final Exception ex)
+        {
+            view.ShowError(_context.getString(R.string.nosql_dialog_title_failed_operation_text), ex.getMessage());
+        }
     }
 
 }

@@ -10,10 +10,12 @@ import java.util.ArrayList;
 public interface IProductListView
 {
     //void AddNewItem(Product product);
-    void RemoveItem(Product product);
-    void EditItem(Product product, Boolean isRestore);
+    //void RemoveItem(Product product);
+    //void EditItem(Product product, Boolean isRestore);
     //void GetItems();
     void ShowItemAddedSnackbar(Product newItem);
+    void ShowEditItemSnackbar(Product originalItem, Boolean isRestore);
+    void ShowRemoveItemSnackbar(Product product);
     void ShowError(String message, String ExceptionMessage);
     void RefreshProductsList(ArrayList<Product> items);
     void SetSwipeContainerRefreshStatus(Boolean status);

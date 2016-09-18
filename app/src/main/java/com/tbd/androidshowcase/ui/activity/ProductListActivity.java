@@ -86,11 +86,7 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
 
         setupActionBar();
 
-        //final String tableName = "Products";//args.getString(BUNDLE_ARGS_TABLE_TITLE);
-        //productTable = TableFactory.instance(getApplicationContext()).getNoSQLTableByTableName(tableName);
-
         // Get Products list on Activity creation
-        //GetItems();
         presenter.GetItems();
     }
 
@@ -106,7 +102,6 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
             public void onRefresh() {
 
                 // Pull to refresh for products list.
-                //GetItems();
                 presenter.GetItems();
             }
         });
@@ -179,7 +174,7 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
                 showDialog(false, (Product)items.get(info.position));
                 return true;
             case R.id.delete:
-                RemoveItem((Product)items.get(info.position));
+                presenter.onDeleteItemClicked((Product)items.get(info.position));
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -191,16 +186,7 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
         if(isNew)
             presenter.onAddNewItemClicked(product);
         else
-        {
             presenter.onEditItemClicked(product, false);
-            //EditItem(product, false);
-        }
-        /*        if(isNew)
-            AddNewItem(product);
-        else
-        {
-            EditItem(product, false);
-        }*/
     }
 
     @Override
@@ -211,9 +197,40 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
                     @Override
                     public void onClick(View view){
 
-                        RemoveItem(newItem);
+                        presenter.onDeleteItemClicked(newItem);
                     }
                 });
+        snackbar.show();
+    }
+
+    @Override
+    public void ShowEditItemSnackbar(final Product originalProduct, final Boolean isRestore)
+    {
+        Snackbar snackbar = Snackbar.make(coordinatorLayout, isRestore ? "Item Restored" : "Item Updated", Snackbar.LENGTH_LONG)
+                .setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view){
+
+                        presenter.onEditItemClicked(originalProduct, !isRestore);
+                    }
+                });
+
+        snackbar.show();
+    }
+
+    @Override
+    public void ShowRemoveItemSnackbar(final Product product)
+    {
+        Snackbar snackbar = Snackbar.make(coordinatorLayout, "Item Removed", Snackbar.LENGTH_LONG)
+                .setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view){
+
+                        //AddNewItem(product);
+                        presenter.onAddNewItemClicked(product);
+                    }
+                });
+
         snackbar.show();
     }
 
@@ -223,60 +240,6 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
         createAndShowDialog(getString(R.string.nosql_dialog_title_failed_operation_text), exceptionMessage);
     }
 
-    /*@Override
-    public void AddNewItem(final Product product)
-    {
-       // Obtain a reference to the identity manager.
-        // TODO: Implement callable instead so I can return the new product?
-        AWSMobileClient.initializeMobileClientIfNecessary(this);
-
-        final Callable<Product> f = new Callable<Product>() {
-
-            @Override
-            public Product call() throws Exception {
-
-                return (Product)productTable.addNewItem(product);
-            };
-
-        };
-
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        Future<Product> result = executor.submit(f);
-
-        try
-        {
-            final Product newItem = result.get();
-
-            //GetItems();
-            presenter.GetItems();
-
-            Snackbar snackbar = Snackbar.make(coordinatorLayout, "Item added", Snackbar.LENGTH_LONG)
-                    .setAction("UNDO", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view){
-
-                            RemoveItem(newItem);
-                        }
-                    });
-            snackbar.show();
-
-        }catch(final Exception ex)
-        {
-            createAndShowDialog(getString(R.string.nosql_dialog_title_failed_operation_text), ex.getMessage());
-        }
-    }
-
-    /*private void refreshProductsList()
-    {
-        exampleListView.invalidate();
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                productsAdapter.refreshProducts((ArrayList<Product>)items);
-            }
-        });
-    }*/
     @Override
     public void RefreshProductsList(final ArrayList<Product> products)
     {
@@ -294,144 +257,6 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
     public void SetSwipeContainerRefreshStatus(final Boolean status)
     {
         swipeContainer.setRefreshing(status);
-    }
-
-    @Override
-    public void RemoveItem(final Product product)
-    {
-        // Obtain a reference to the identity manager.
-        AWSMobileClient.initializeMobileClientIfNecessary(this);
-
-        final Callable<Void> f = new Callable<Void>() {
-
-            @Override
-            public Void call() throws Exception {
-
-                productTable.removeItem(product.getProductId());
-
-                return null;
-            };
-        };
-
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        Future<Void> result = executor.submit(f);
-
-        try
-        {
-            final Void voidResult = result.get();
-
-            //GetItems();
-            presenter.GetItems();
-
-            Snackbar snackbar = Snackbar.make(coordinatorLayout, "Item Removed", Snackbar.LENGTH_LONG)
-                    .setAction("UNDO", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view){
-
-                            //AddNewItem(product);
-                            presenter.onAddNewItemClicked(product);
-                        }
-                    });
-            snackbar.show();
-
-        }catch(final Exception ex)
-        {
-            createAndShowDialog(getString(R.string.nosql_dialog_title_failed_operation_text), ex.getMessage());
-        }
-    }
-
-    @Override
-    public void EditItem(final Product product, final Boolean isRestore)
-    {
-        // Obtain a reference to the identity manager.
-        AWSMobileClient.initializeMobileClientIfNecessary(this);
-
-        final Callable<Product> f = new Callable<Product>() {
-
-            @Override
-            public Product call() throws Exception {
-
-                return (Product)productTable.editItem(product);
-            };
-
-        };
-
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        Future<Product> result = executor.submit(f);
-
-        try
-        {
-            final Product originalProduct = result.get();
-
-            //GetItems();
-            presenter.GetItems();
-
-            Snackbar snackbar = Snackbar.make(coordinatorLayout, isRestore ? "Item Restored" : "Item Updated", Snackbar.LENGTH_LONG)
-                    .setAction("UNDO", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view){
-
-                            EditItem(originalProduct, !isRestore);
-                        }
-                    });
-            snackbar.show();
-
-        }catch(final Exception ex)
-        {
-            createAndShowDialog(getString(R.string.nosql_dialog_title_failed_operation_text), ex.getMessage());
-        }
-    }
-
-   /* @Override
-    public void GetItems()
-    {
-        // Obtain a reference to the identity manager.
-        AWSMobileClient.initializeMobileClientIfNecessary(this);
-
-        final Callable<ArrayList<ITableObject>> f = new Callable<ArrayList<ITableObject>>() {
-
-                @Override
-                public ArrayList<ITableObject> call() throws Exception {
-
-                    return (ArrayList<ITableObject>)productTable.getItems();
-                };
-
-        };
-
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        Future<ArrayList<ITableObject>> result = executor.submit(f);
-
-        try
-        {
-            items = result.get();
-
-            refreshProductsList();
-
-        }catch(final Exception ex)
-        {
-            createAndShowDialog(getString(R.string.nosql_dialog_title_failed_operation_text), ex.getMessage());
-        }
-
-        // Now we call setRefreshing(false) to signal refresh has finished
-        swipeContainer.setRefreshing(false);
-
-    }*/
-
-    private AsyncTask<Void, Void, Void> runAsyncTask(AsyncTask<Void, Void, Void> task) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            return task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        } else {
-            return task.execute();
-        }
-    }
-
-    private void createAndShowDialog(Exception exception, String title) {
-        Throwable ex = exception;
-        if(exception.getCause() != null){
-            ex = exception.getCause();
-        }
-
-        createAndShowDialog(ex.getMessage(), title);
     }
 
     private void createAndShowDialog(final String message, final String title) {
