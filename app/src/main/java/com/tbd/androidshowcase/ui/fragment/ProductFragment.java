@@ -22,6 +22,8 @@ import android.widget.ImageButton;
 
 import com.tbd.androidshowcase.R;
 import com.tbd.androidshowcase.model.Product;
+import com.tbd.androidshowcase.presenter.ProductListPresenter;
+import com.tbd.androidshowcase.ui.activity.ProductListActivity;
 
 /**
  * Created by Trevor on 9/13/2016.

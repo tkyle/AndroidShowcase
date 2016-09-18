@@ -56,7 +56,7 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
 
     // region Fields
 
-    private final String tableName = "Products";
+//    private final String tableName = "Products";
     private CoordinatorLayout coordinatorLayout;
     private SwipeRefreshLayout swipeContainer;
     private ProductListPresenter presenter;
@@ -75,7 +75,7 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
-        presenter = new ProductListPresenter(ProductListActivity.this);
+        presenter = new ProductListPresenter(ProductListActivity.this, this.getApplicationContext());
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
 
         setupSwipeContainer();
@@ -87,10 +87,11 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
         setupActionBar();
 
         //final String tableName = "Products";//args.getString(BUNDLE_ARGS_TABLE_TITLE);
-        productTable = TableFactory.instance(getApplicationContext()).getNoSQLTableByTableName(tableName);
+        //productTable = TableFactory.instance(getApplicationContext()).getNoSQLTableByTableName(tableName);
 
         // Get Products list on Activity creation
-        GetItems();
+        //GetItems();
+        presenter.GetItems();
     }
 
     // endregion
@@ -105,7 +106,8 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
             public void onRefresh() {
 
                 // Pull to refresh for products list.
-                GetItems();
+                //GetItems();
+                presenter.GetItems();
             }
         });
 
@@ -187,14 +189,41 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
     @Override
     public void onFinishEditDialog(Product product, Boolean isNew) {
         if(isNew)
+            presenter.onAddNewItemClicked(product);
+        else
+        {
+            presenter.onEditItemClicked(product, false);
+            //EditItem(product, false);
+        }
+        /*        if(isNew)
             AddNewItem(product);
         else
         {
             EditItem(product, false);
-        }
+        }*/
     }
 
     @Override
+    public void ShowItemAddedSnackbar(final Product newItem)
+    {
+        Snackbar snackbar = Snackbar.make(coordinatorLayout, "Item added", Snackbar.LENGTH_LONG)
+                .setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view){
+
+                        RemoveItem(newItem);
+                    }
+                });
+        snackbar.show();
+    }
+
+    @Override
+    public void ShowError(String message, String exceptionMessage)
+    {
+        createAndShowDialog(getString(R.string.nosql_dialog_title_failed_operation_text), exceptionMessage);
+    }
+
+    /*@Override
     public void AddNewItem(final Product product)
     {
        // Obtain a reference to the identity manager.
@@ -218,7 +247,8 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
         {
             final Product newItem = result.get();
 
-            GetItems();
+            //GetItems();
+            presenter.GetItems();
 
             Snackbar snackbar = Snackbar.make(coordinatorLayout, "Item added", Snackbar.LENGTH_LONG)
                     .setAction("UNDO", new View.OnClickListener() {
@@ -236,7 +266,7 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
         }
     }
 
-    private void refreshProductsList()
+    /*private void refreshProductsList()
     {
         exampleListView.invalidate();
 
@@ -246,6 +276,24 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
                 productsAdapter.refreshProducts((ArrayList<Product>)items);
             }
         });
+    }*/
+    @Override
+    public void RefreshProductsList(final ArrayList<Product> products)
+    {
+        exampleListView.invalidate();
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                productsAdapter.refreshProducts(products);
+            }
+        });
+    }
+
+    @Override
+    public void SetSwipeContainerRefreshStatus(final Boolean status)
+    {
+        swipeContainer.setRefreshing(status);
     }
 
     @Override
@@ -272,14 +320,16 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
         {
             final Void voidResult = result.get();
 
-            GetItems();
+            //GetItems();
+            presenter.GetItems();
 
             Snackbar snackbar = Snackbar.make(coordinatorLayout, "Item Removed", Snackbar.LENGTH_LONG)
                     .setAction("UNDO", new View.OnClickListener() {
                         @Override
                         public void onClick(View view){
 
-                            AddNewItem(product);
+                            //AddNewItem(product);
+                            presenter.onAddNewItemClicked(product);
                         }
                     });
             snackbar.show();
@@ -313,7 +363,8 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
         {
             final Product originalProduct = result.get();
 
-            GetItems();
+            //GetItems();
+            presenter.GetItems();
 
             Snackbar snackbar = Snackbar.make(coordinatorLayout, isRestore ? "Item Restored" : "Item Updated", Snackbar.LENGTH_LONG)
                     .setAction("UNDO", new View.OnClickListener() {
@@ -331,7 +382,7 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
         }
     }
 
-    @Override
+   /* @Override
     public void GetItems()
     {
         // Obtain a reference to the identity manager.
@@ -364,7 +415,7 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
         // Now we call setRefreshing(false) to signal refresh has finished
         swipeContainer.setRefreshing(false);
 
-    }
+    }*/
 
     private AsyncTask<Void, Void, Void> runAsyncTask(AsyncTask<Void, Void, Void> task) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
