@@ -86,7 +86,7 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
         setupActionBar();
 
         // Get Products list on Activity creation
-        presenter.GetItems();
+        presenter.GetProducts();
     }
 
     // endregion
@@ -101,7 +101,7 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
             public void onRefresh() {
 
                 // Pull to refresh for products list.
-                presenter.GetItems();
+                presenter.GetProducts();
             }
         });
 
@@ -189,7 +189,7 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
     }
 
     @Override
-    public void ShowItemAddedSnackbar(final Product newItem)
+    public void ShowProductAddedSnackbar(final Product newItem)
     {
         Snackbar snackbar = Snackbar.make(coordinatorLayout, "Item added", Snackbar.LENGTH_LONG)
                 .setAction("UNDO", new View.OnClickListener() {
@@ -203,7 +203,7 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
     }
 
     @Override
-    public void ShowEditItemSnackbar(final Product originalProduct, final Boolean isRestore)
+    public void ShowEditProductSnackbar(final Product originalProduct, final Boolean isRestore)
     {
         Snackbar snackbar = Snackbar.make(coordinatorLayout, isRestore ? "Item Restored" : "Item Updated", Snackbar.LENGTH_LONG)
                 .setAction("UNDO", new View.OnClickListener() {
@@ -218,7 +218,7 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
     }
 
     @Override
-    public void ShowRemoveItemSnackbar(final Product product)
+    public void ShowRemoveProductSnackbar(final Product product)
     {
         Snackbar snackbar = Snackbar.make(coordinatorLayout, "Item Removed", Snackbar.LENGTH_LONG)
                 .setAction("UNDO", new View.OnClickListener() {

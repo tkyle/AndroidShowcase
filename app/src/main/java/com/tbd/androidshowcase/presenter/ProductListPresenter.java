@@ -36,7 +36,7 @@ public class ProductListPresenter
         _context = context;
     }
 
-    public void GetItems()
+    public void GetProducts()
     {
         // Obtain a reference to the identity manager.
         AWSMobileClient.initializeMobileClientIfNecessary(_context);
@@ -93,9 +93,9 @@ public class ProductListPresenter
         {
             final Product newItem = result.get();
 
-            this.GetItems();
+            this.GetProducts();
 
-            view.ShowItemAddedSnackbar(newItem);
+            view.ShowProductAddedSnackbar(newItem);
 
         }catch(final Exception ex)
         {
@@ -126,9 +126,9 @@ public class ProductListPresenter
         {
             final Product originalProduct = result.get();
 
-            this.GetItems();
+            this.GetProducts();
 
-            view.ShowEditItemSnackbar(originalProduct, !isRestore);
+            view.ShowEditProductSnackbar(originalProduct, !isRestore);
 
         }catch(final Exception ex)
         {
@@ -159,9 +159,9 @@ public class ProductListPresenter
         {
             final Void voidResult = result.get();
 
-            this.GetItems();
+            this.GetProducts();
 
-            view.ShowRemoveItemSnackbar(product);
+            view.ShowRemoveProductSnackbar(product);
 
         }catch(final Exception ex)
         {
