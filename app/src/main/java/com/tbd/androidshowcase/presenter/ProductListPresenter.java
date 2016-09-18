@@ -73,7 +73,7 @@ public class ProductListPresenter
 
         }catch(final Exception ex)
         {
-            view.ShowError(_context.getString(R.string.nosql_dialog_title_failed_operation_text), ex.getMessage());
+            view.ShowError(_context.getString(R.string.failed_operation), ex.getMessage());
         }
 
         // setRefreshing(false) to signal refresh has finished
@@ -112,7 +112,7 @@ public class ProductListPresenter
 
         }catch(final Exception ex)
         {
-            view.ShowError(_context.getString(R.string.nosql_dialog_title_failed_operation_text), ex.getMessage());
+            view.ShowError(_context.getString(R.string.failed_operation), ex.getMessage());
         }
     }
 
@@ -147,7 +147,7 @@ public class ProductListPresenter
 
         }catch(final Exception ex)
         {
-            view.ShowError(_context.getString(R.string.nosql_dialog_title_failed_operation_text), ex.getMessage());
+            view.ShowError(_context.getString(R.string.failed_operation), ex.getMessage());
         }
     }
 
@@ -183,7 +183,7 @@ public class ProductListPresenter
 
         }catch(final Exception ex)
         {
-            view.ShowError(_context.getString(R.string.nosql_dialog_title_failed_operation_text), ex.getMessage());
+            view.ShowError(_context.getString(R.string.failed_operation), ex.getMessage());
         }
     }
 

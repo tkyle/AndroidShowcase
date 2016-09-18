@@ -232,7 +232,7 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
     @Override
     public void ShowError(String message, String exceptionMessage)
     {
-        createAndShowDialog(getString(R.string.nosql_dialog_title_failed_operation_text), exceptionMessage);
+        createAndShowDialog(message, exceptionMessage);
     }
 
     @Override

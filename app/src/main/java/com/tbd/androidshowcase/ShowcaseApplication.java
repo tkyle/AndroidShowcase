@@ -21,8 +21,7 @@ public class ShowcaseApplication extends Application {
     }
 
     private void initializeApplication() {
-        AWSMobileClient.initializeMobileClientIfNecessary(getApplicationContext());
 
-        // ...Put any application-specific initialization logic here...
+        AWSMobileClient.initializeMobileClientIfNecessary(getApplicationContext());
     }
 }
