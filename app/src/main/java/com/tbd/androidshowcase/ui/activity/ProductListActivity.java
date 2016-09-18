@@ -1,56 +1,29 @@
 package com.tbd.androidshowcase.ui.activity;
 
-import android.app.Dialog;
-import android.app.FragmentTransaction;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatDialogFragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.amazonaws.AmazonClientException;
 import com.tbd.androidshowcase.R;
 import com.tbd.androidshowcase.presenter.ProductListPresenter;
 import com.tbd.androidshowcase.ui.fragment.ProductFragment;
-import com.tbd.androidshowcase.user.IdentityManager;
-import com.tbd.androidshowcase.utility.AWSMobileClient;
 import com.tbd.androidshowcase.tables.ITableObject;
-import com.tbd.androidshowcase.tables.NoSQLTableBase;
 import com.tbd.androidshowcase.model.Product;
 import com.tbd.androidshowcase.ui.adapters.ProductsAdapter;
-import com.tbd.androidshowcase.tables.TableFactory;
-import com.tbd.androidshowcase.utility.ThreadUtils;
 import com.tbd.androidshowcase.view.IProductListView;
-
 import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 public class ProductListActivity extends AppCompatActivity implements IProductListView, ProductFragment.ProductFragmentListener {
 
@@ -61,7 +34,6 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
     private ProductListPresenter presenter;
     ListView productsListView;
     ArrayList<? extends ITableObject> productList;
-    private NoSQLTableBase productTable;
     ProductsAdapter productsAdapter;
     FloatingActionButton newButton;
 
@@ -71,9 +43,23 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
+        // Grab the needed view references for the activity
+        SetupViewsAndContainers();
+
+        // Get Products list on Activity creation
+        presenter.GetProducts();
+    }
+
+    // endregion
+
+    // region Setup Methods
+
+    private void SetupViewsAndContainers()
+    {
         presenter = new ProductListPresenter(ProductListActivity.this, this.getApplicationContext());
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
 
@@ -84,14 +70,7 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
         setupActionButton();
 
         setupActionBar();
-
-        // Get Products list on Activity creation
-        presenter.GetProducts();
     }
-
-    // endregion
-
-    // region Setup Methods
 
     private void setupSwipeContainer()
     {
@@ -147,6 +126,8 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
 
     // endregion
 
+    // region Methods
+
     public void showDialog(Boolean isNew, Product product)
     {
         FragmentManager fm = getSupportFragmentManager();
@@ -187,6 +168,18 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
         else
             presenter.onEditItemClicked(product, false);
     }
+
+    private void createAndShowDialog(final String message, final String title) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setMessage(message);
+        builder.setTitle(title);
+        builder.create().show();
+    }
+
+    // endregion
+
+    // region IProductListView Implementation
 
     @Override
     public void ShowProductAddedSnackbar(final Product newItem)
@@ -258,11 +251,6 @@ public class ProductListActivity extends AppCompatActivity implements IProductLi
         swipeContainer.setRefreshing(status);
     }
 
-    private void createAndShowDialog(final String message, final String title) {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    // endregion
 
-        builder.setMessage(message);
-        builder.setTitle(title);
-        builder.create().show();
-    }
 }
