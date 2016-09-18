@@ -30,16 +30,19 @@ import com.tbd.androidshowcase.ui.activity.ProductListActivity;
  */
 public class ProductFragment extends android.support.v4.app.DialogFragment
 {
+    // region Fields
+
     private ImageButton btnDismiss;
     private Button btnSubmit;
-
     private EditText productName;
     private EditText productDescription;
     private EditText productCost;
-
     private Boolean isNew;
-
     private Product product;
+
+    // endregion
+
+    // region Methods
 
     public static ProductFragment newInstance(String title, Product _product,  Boolean isNew) {
 
@@ -51,21 +54,16 @@ public class ProductFragment extends android.support.v4.app.DialogFragment
         args.putString("productName", _product.getName());
         args.putString("productDescription", _product.getDescription());
         args.putString("productCost", _product.getCost() != null ? _product.getCost().toString() : "0.00");
-
         args.putString("title", title);
-
         args.putBoolean("isNew", isNew);
 
         frag.setArguments(args);
+
         return frag;
     }
 
     public interface ProductFragmentListener {
         void onFinishEditDialog(Product product, Boolean isNew);
-    }
-
-    public ProductFragment() {
-        // Empty constructor required for DialogFragment
     }
 
     @Override
@@ -124,10 +122,8 @@ public class ProductFragment extends android.support.v4.app.DialogFragment
             productCost.setText(product.getCost().toString());
         }
 
-        // Show soft keyboard automatically
-        //mEditText.requestFocus();
-        //getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         return view;
     }
 
+    // endregion
 }
