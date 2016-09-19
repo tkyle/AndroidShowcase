@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 
 import com.tbd.androidshowcase.R;
 import com.tbd.androidshowcase.model.Product;
+import com.tbd.androidshowcase.utility.NumberUtils;
 
 /**
  * Created by Trevor on 9/13/2016.
@@ -42,7 +43,7 @@ public class ProductFragment extends android.support.v4.app.DialogFragment
         args.putString("productId", _product.getProductId());
         args.putString("productName", _product.getName());
         args.putString("productDescription", _product.getDescription());
-        args.putString("productCost", _product.getCost() != null ? _product.getCost().toString() : "0.00");
+        args.putString("productCost", Float.toString(_product.getCost()));
         args.putString("title", title);
         args.putBoolean("isNew", isNew);
 
@@ -73,7 +74,7 @@ public class ProductFragment extends android.support.v4.app.DialogFragment
         product.setProductId(getArguments().getString("productId"));
         product.setName(getArguments().getString("productName"));
         product.setDescription(getArguments().getString("productDescription"));
-        product.setCost(getArguments().getString("productCost") != null ? Double.parseDouble(getArguments().getString("productCost")) : 0.00);
+        product.setCost(Float.parseFloat(getArguments().getString("productCost")));
     }
 
     private void SetupViewsAndContainers()
@@ -105,7 +106,7 @@ public class ProductFragment extends android.support.v4.app.DialogFragment
         {
             productName.setText(product.getName());
             productDescription.setText(product.getDescription());
-            productCost.setText(product.getCost().toString());
+            productCost.setText(Float.toString(product.getCost()));
         }
     }
 
@@ -120,7 +121,6 @@ public class ProductFragment extends android.support.v4.app.DialogFragment
         });
     }
 
-
     private void setupSubmitButton()
     {
         btnSubmit = (Button) view.findViewById(R.id.btnSubmit);
@@ -129,9 +129,25 @@ public class ProductFragment extends android.support.v4.app.DialogFragment
             public void onClick(View v) {
                 ProductFragmentListener listener = (ProductFragmentListener) getActivity();
 
+                // Missing product information.
+                if((productName.getText().toString() == null || productName.getText().toString().isEmpty()) ||
+                        (productDescription.getText().toString() == null || productDescription.getText().toString().isEmpty()) ||
+                        (productCost.getText().toString() == null || productCost.getText().toString().isEmpty()))
+                {
+                    return;
+                }
+
                 product.setName(productName.getText().toString());
-                product.setDescription( productDescription.getText().toString());
-                product.setCost(Double.parseDouble(productCost.getText().toString()));
+                product.setDescription(productDescription.getText().toString());
+
+                if(NumberUtils.TryParseFloat(productCost.getText().toString()))
+                {
+                    product.setCost(Float.parseFloat(productCost.getText().toString()));
+                }
+                else
+                {
+                    product.setCost(Float.parseFloat("0.00"));
+                }
 
                 listener.onFinishEditDialog(product, isNew);
                 dismiss();

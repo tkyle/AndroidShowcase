@@ -44,7 +44,7 @@ public class ProductsAdapter  extends ArrayAdapter<Product> {
         // Populate the data into the template view using the data object
         productNameText.setText(product.getName());
         productDescriptionText.setText(product.getDescription());
-        productCostText.setText(product.getCost().toString());
+        productCostText.setText(Float.toString(product.getCost()));
 
         // Return the completed view to render on screen
         return convertView;

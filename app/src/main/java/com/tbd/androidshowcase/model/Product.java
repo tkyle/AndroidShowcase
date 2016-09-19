@@ -18,7 +18,7 @@ public class Product implements ITableObject
     private String _productId;
     private String _name;
     private String _description;
-    private Double _cost;
+    private float _cost;
 
     public Product()
     {
@@ -74,10 +74,10 @@ public class Product implements ITableObject
     }
 
     @DynamoDBIndexRangeKey(attributeName = "Cost", globalSecondaryIndexName = "DateSorted")
-    public Double getCost() {
+    public float getCost() {
         return _cost;
     }
-    public void setCost(final Double _cost) {
+    public void setCost(final float _cost) {
         this._cost = _cost;
     }
 

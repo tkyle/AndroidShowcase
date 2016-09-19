@@ -59,16 +59,16 @@ public class ProductTable extends NoSQLTableBase
         }
     }
 
-    private double getProductCost(double productCost)
+    private float getProductCost(float productCost)
     {
-        String text = Double.toString(Math.abs(productCost));
+        String text = Float.toString(Math.abs(productCost));
         int integerPlaces = text.indexOf('.');
         int decimalPlaces = text.length() - integerPlaces - 1;
 
         if(decimalPlaces > 2)
         {
             BigDecimal a = new BigDecimal(productCost);
-            return a.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+            return a.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
         }
         else
         {
