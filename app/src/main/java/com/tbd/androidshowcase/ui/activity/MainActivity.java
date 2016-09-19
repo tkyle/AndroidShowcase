@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements IMainView
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.custom_toolbar);
         setSupportActionBar(myToolbar);
-        getSupportActionBar().setTitle("Android Showcase");
+        getSupportActionBar().setTitle(R.string.main_action_bar_title);
     }
 
     // endregion
