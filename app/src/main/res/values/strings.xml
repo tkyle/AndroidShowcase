@@ -16,5 +16,6 @@
     <string name="product_updated_snackbar_message">Product Updated</string>
     <string name="product_removed_snackbar_message">Product Removed</string>
     <string name="fragment_dialog_tag">fragment_product</string>
+    <string name="product_table_name">Products</string>
 
 </resources>

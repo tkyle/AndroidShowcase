@@ -12,6 +12,7 @@ import com.amazonaws.services.dynamodbv2.model.Condition;
 import com.tbd.androidshowcase.model.Product;
 import com.tbd.androidshowcase.utility.AWSMobileClient;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -46,7 +47,8 @@ public class ProductTable extends NoSQLTableBase
         newProduct.setProductId(product.getProductId());
         newProduct.setName(product.getName());
         newProduct.setDescription(product.getDescription());
-        newProduct.setCost(product.getCost());
+
+        newProduct.setCost(getProductCost(product.getCost()));
 
         try {
             mapper.save(newProduct);
@@ -54,6 +56,23 @@ public class ProductTable extends NoSQLTableBase
         } catch (final AmazonClientException ex) {
             Log.e(LOG_TAG, "Failed saving product : " + ex.getMessage(), ex);
             throw ex;
+        }
+    }
+
+    private double getProductCost(double productCost)
+    {
+        String text = Double.toString(Math.abs(productCost));
+        int integerPlaces = text.indexOf('.');
+        int decimalPlaces = text.length() - integerPlaces - 1;
+
+        if(decimalPlaces > 2)
+        {
+            BigDecimal a = new BigDecimal(productCost);
+            return a.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        }
+        else
+        {
+            return productCost;
         }
     }
 
@@ -114,7 +133,8 @@ public class ProductTable extends NoSQLTableBase
 
             item.setName(product.getName());
             item.setDescription(product.getDescription());
-            item.setCost(product.getCost());
+
+            item.setCost(getProductCost(product.getCost()));
 
             try {
                 mapper.save(item);
